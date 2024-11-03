@@ -1,0 +1,19 @@
+# Gradle files
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.properties
+gradle/wrapper/gradle-wrapper.jar
+
+# IDEA files
+.idea/
+*.iml
+
+# Logs
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Generated files
+out/
