@@ -1,17 +1,9 @@
 # Task List for Bouldering Gym Reception App
 
+## General explanation
+This application will be for bouldering gym for managing user balances, entries, subscriptions and allow faster entry to gym and also make it easy for employees by just scanning customer QR and see their information and automatic decreasing from their 10, 20 time entry passes or checking from their monthly, yearly subscriptions or noticing customer doesnt have subscription or entry anymore. customer can also load money to their name and just QR code can be scanned from customer for product purchases like snacks or climbing supplies. this application is for climbing gym reception. And also there will a new-customer form which you will read about more detailed in following files.
+
 ## 1. Database Design and Setup
-- Define tables:
-  - **Customers**: Basic customer information, consent status, photo, account balance.
-  - **Entries**: Manages gym entry records, including subscription and multi-pass tracking.
-  - **Products**: Inventory items (e.g., snacks, drinks, climbing supplies).
-  - **EntryConsumption**: Logs each gym entry, tracking usage and subscription status.
-  - **ProductConsumption**: Records product purchases made by customers.
-  - **EmployeeActions**: Tracks employee actions (e.g., processing entries, handling purchases).
-  - **Employees**: Stores employee login credentials and basic details.
-  - **AccountTransactions**: Logs all financial transactions, such as deposits, purchases, and refunds.
-  - **SubscriptionPlans**: Manages available subscription types, allowing for flexible updates.
-  - **ConsentForms**: Stores various consents signed by customers (e.g., liability waiver, photo consent).
 - Use **Spring Hibernate** for ORM and database management.
 
 ## 2. Authentication & Authorization
