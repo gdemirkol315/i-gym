@@ -1,19 +1,32 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule
+  ]
 })
 export class HeaderComponent {
   @Output() toggleSidenav = new EventEmitter<void>();
 
-  constructor(private router: Router) {}
+  constructor(private authService: AuthService) {}
 
   logout(): void {
-    // TODO: Implement logout logic with AuthService
-    localStorage.removeItem('token');
-    this.router.navigate(['/auth/login']);
+    this.authService.logout();
   }
 }
