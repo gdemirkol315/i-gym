@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.security.SecureRandom;
 import java.util.Base64;
@@ -49,5 +50,32 @@ public class EmployeeService {
         employee.setCredentials(credentials);
 
         return employeeRepository.save(employee);
+    }
+
+    public Employee getEmployeeProfile(String username) {
+        return employeeRepository.findByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException("Employee not found"));
+    }
+
+    @Transactional
+    public boolean changePassword(String username, String oldPassword, String newPassword) {
+        Employee employee = employeeRepository.findByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException("Employee not found"));
+
+        String saltStr = employee.getSalt().getSalt();
+        String oldSaltedPassword = oldPassword + saltStr;
+        
+        // Verify old password
+        if (!passwordEncoder.matches(oldSaltedPassword, employee.getCredentials().getHashedPassword())) {
+            return false;
+        }
+
+        // Update to new password
+        String newSaltedPassword = newPassword + saltStr;
+        String newHashedPassword = passwordEncoder.encode(newSaltedPassword);
+        employee.getCredentials().setHashedPassword(newHashedPassword);
+        employeeRepository.save(employee);
+        
+        return true;
     }
 }

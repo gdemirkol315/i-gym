@@ -23,6 +23,12 @@ public class Employee {
     @Column(nullable = false)
     private String name;
 
+    @Column
+    private String lastName;
+
+    @Column
+    private String address;
+
     @Column(nullable = false)
     private String position;
 
@@ -47,6 +53,9 @@ public class Employee {
         MANAGER,
         EMPLOYEE
     }
+
+    @Column
+    private String email;
 
     @Override
     public String toString() {

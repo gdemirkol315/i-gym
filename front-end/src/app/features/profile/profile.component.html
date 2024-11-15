@@ -1,0 +1,50 @@
+<div class="profile-container">
+  <mat-card *ngIf="!loading && !error">
+    <mat-card-header>
+      <mat-card-title>Profile Details</mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <div class="profile-details">
+        <div class="detail-row">
+          <span class="label">Name:</span>
+          <span class="value">{{employee?.name}} {{employee?.lastName}}</span>
+        </div>
+        
+        <div class="detail-row">
+          <span class="label">Email:</span>
+          <span class="value">{{employee?.email}}</span>
+        </div>
+        
+        <div class="detail-row">
+          <span class="label">Position:</span>
+          <span class="value">{{employee?.position}}</span>
+        </div>
+        
+        <div class="detail-row">
+          <span class="label">Role:</span>
+          <span class="value">{{employee?.role}}</span>
+        </div>
+        
+        <div class="detail-row">
+          <span class="label">Address:</span>
+          <span class="value">{{employee?.address}}</span>
+        </div>
+      </div>
+    </mat-card-content>
+    
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="openChangePasswordDialog()">
+        Change Password
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-spinner *ngIf="loading" diameter="50" class="loading-spinner"></mat-spinner>
+
+  <mat-card *ngIf="error" class="error-card">
+    <mat-card-content>
+      <p class="error-message">{{error}}</p>
+    </mat-card-content>
+  </mat-card>
+</div>

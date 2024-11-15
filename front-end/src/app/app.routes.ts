@@ -33,6 +33,11 @@ export const routes: Routes = [
           .then(m => m.ProductModule)
       },
       {
+        path: 'profile',
+        loadChildren: () => import('./features/profile/profile.module')
+          .then(m => m.ProfileModule)
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'
