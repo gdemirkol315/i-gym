@@ -3,6 +3,7 @@
 build/
 !gradle/wrapper/gradle-wrapper.properties
 gradle/wrapper/gradle-wrapper.jar
+bin/
 
 # IDEA files
 .idea/
