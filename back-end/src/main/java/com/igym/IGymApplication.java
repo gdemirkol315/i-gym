@@ -23,10 +23,11 @@ public class IGymApplication {
             if (employeeRepository.count() == 0) {
                 // Create admin user
                 employeeService.createEmployee(
-                    "Admin",
                     "System Administrator",
-                    Employee.Role.MANAGER,
-                    "admin123" // You should change this password in production
+                    "Admin",
+                    "admin123",
+                        "Default",// You should change this password in production,
+                        Employee.Role.MANAGER
                 );
                 System.out.println("Admin user created successfully!");
                 System.out.println("Username: Admin");

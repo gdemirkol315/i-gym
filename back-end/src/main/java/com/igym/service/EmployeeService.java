@@ -19,7 +19,7 @@ public class EmployeeService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public Employee createEmployee(String name, String position, Employee.Role role, String password) {
+    public Employee createEmployee(String name, String username, String password, String position, Employee.Role role) {
         // Generate a random salt
         SecureRandom random = new SecureRandom();
         byte[] saltBytes = new byte[16];
@@ -38,10 +38,13 @@ public class EmployeeService {
         salt.setSalt(saltStr);
         employee.setSalt(salt);
 
-        // Create and set credentials with hashed password
-        String hashedPassword = passwordEncoder.encode(password + saltStr);
+        // Create and set credentials with salted and hashed password
+        String saltedPassword = password + saltStr;
+        String hashedPassword = passwordEncoder.encode(saltedPassword);
+        
         Credentials credentials = new Credentials();
         credentials.setEmployee(employee);
+        credentials.setUsername(username);
         credentials.setHashedPassword(hashedPassword);
         employee.setCredentials(credentials);
 

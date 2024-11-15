@@ -17,15 +17,13 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.secret}")
-    private String secret;
+    private static final Key SIGNING_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     @Value("${jwt.expiration}")
     private Long expiration;
 
     private Key getSigningKey() {
-        byte[] keyBytes = secret.getBytes();
-        return Keys.hmacShaKeyFor(keyBytes);
+        return SIGNING_KEY;
     }
 
     public String extractUsername(String token) {

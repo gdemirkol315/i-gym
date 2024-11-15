@@ -1,7 +1,8 @@
 package com.igym.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -11,7 +12,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "employees")
-@Data
+@Getter
+@Setter
 @EntityListeners(AuditingEntityListener.class)
 public class Employee {
     @Id
@@ -46,4 +48,13 @@ public class Employee {
         EMPLOYEE
     }
 
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", position='" + position + '\'' +
+                ", role=" + role +
+                '}';
+    }
 }

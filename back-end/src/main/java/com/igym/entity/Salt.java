@@ -1,11 +1,13 @@
 package com.igym.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "salt")
-@Data
+@Getter
+@Setter
 public class Salt {
     @Id
     private Long employeeId;
@@ -17,4 +19,11 @@ public class Salt {
 
     @Column(nullable = false)
     private String salt;
+
+    @Override
+    public String toString() {
+        return "Salt{" +
+                "employeeId=" + employeeId +
+                '}';
+    }
 }
