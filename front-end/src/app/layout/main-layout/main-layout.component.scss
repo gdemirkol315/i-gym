@@ -5,11 +5,13 @@
 
 mat-sidenav-container {
   height: 100%;
+  margin-top: 64px; // Add margin to account for fixed header
 }
 
 mat-sidenav {
   width: 250px;
-  padding-top: 64px; // Height of the toolbar
+  position: fixed; // Fix the sidenav position
+  top: 64px; // Position it below the header
 }
 
 mat-sidenav-content {
@@ -17,18 +19,23 @@ mat-sidenav-content {
 }
 
 .content {
-  padding: 84px 20px 20px; // top padding accounts for toolbar height + spacing
-  height: calc(100% - 104px); // subtract total padding
+  padding: 20px; // Removed top padding since we have margin-top on container
+  height: calc(100% - 40px); // Adjust for padding
   overflow-y: auto;
 }
 
 @media (max-width: 600px) {
+  mat-sidenav-container {
+    margin-top: 56px; // Adjust for smaller header on mobile
+  }
+
   mat-sidenav {
     width: 200px;
+    top: 56px; // Adjust for smaller header on mobile
   }
 
   .content {
-    padding: 74px 16px 16px;
-    height: calc(100% - 90px);
+    padding: 16px;
+    height: calc(100% - 32px);
   }
 }
