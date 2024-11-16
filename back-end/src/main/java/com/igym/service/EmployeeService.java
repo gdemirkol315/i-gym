@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Random;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +22,10 @@ public class EmployeeService {
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+
+    public List<Employee> getAllEmployees() {
+        return employeeRepository.findAll();
+    }
 
     @Transactional
     public Employee createEmployee(String name, String lastName, String address, String email, String position, Employee.Role role) {

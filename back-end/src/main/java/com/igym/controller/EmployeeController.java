@@ -13,11 +13,28 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/api/employee")
 @RequiredArgsConstructor
 public class EmployeeController {
     private final EmployeeService employeeService;
+
+    @GetMapping("/list")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
+        try {
+            List<Employee> employees = employeeService.getAllEmployees();
+            List<EmployeeDTO> employeeDTOs = employees.stream()
+                    .map(EmployeeDTO::fromEntity)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(employeeDTOs);
+        } catch (RuntimeException e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 
     @GetMapping("/profile")
     @PreAuthorize("hasRole('EMPLOYEE') or hasRole('MANAGER')")
@@ -45,16 +62,20 @@ public class EmployeeController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<EmployeeDTO> createEmployee(@Valid @RequestBody CreateEmployeeRequest request) {
-        Employee employee = employeeService.createEmployee(
-            request.getName(),
-            request.getLastName(),
-            request.getAddress(),
-            request.getEmail(),
-            request.getPosition(),
-            Employee.Role.EMPLOYEE
-        );
-        return ResponseEntity.ok(EmployeeDTO.fromEntity(employee));
+    public ResponseEntity<?> createEmployee(@Valid @RequestBody CreateEmployeeRequest request) {
+        try {
+            Employee employee = employeeService.createEmployee(
+                    request.getName(),
+                    request.getLastName(),
+                    request.getAddress(),
+                    request.getEmail(),
+                    request.getPosition(),
+                    Employee.Role.EMPLOYEE
+            );
+            return ResponseEntity.ok(EmployeeDTO.fromEntity(employee));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body("Email already in use");
+        }
     }
 
     @Data

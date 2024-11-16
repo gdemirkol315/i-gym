@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EmployeesService, Employee } from '../employees.service';
 import { AddEmployeeDialogComponent } from '../add-employee-dialog/add-employee-dialog.component';
+import {first} from 'rxjs';
 
 @Component({
   selector: 'app-employee-list',
@@ -42,21 +43,15 @@ export class EmployeeListComponent implements OnInit {
       width: '400px'
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().pipe(first()).subscribe(result => {
       if (result) {
         this.employeesService.createEmployee(result).subscribe({
           next: () => {
             this.loadEmployees();
-            this.snackBar.open('Employee added successfully', 'Close', {
-              duration: 3000,
-              horizontalPosition: 'end'
-            });
+            this.employeesService.toastr.success('Employee added successfully')
           },
           error: () => {
-            this.snackBar.open('Error adding employee', 'Close', {
-              duration: 3000,
-              horizontalPosition: 'end'
-            });
+            this.employeesService.toastr.error('Error adding employee!','Error!')
           }
         });
       }

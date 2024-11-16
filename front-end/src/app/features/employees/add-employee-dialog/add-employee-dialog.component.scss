@@ -3,12 +3,23 @@
   margin-bottom: 16px;
 }
 
-mat-dialog-content {
-  min-width: 350px;
-  padding-top: 16px;
+.spinner-button {
+  display: inline-block;
+  margin-right: 8px;
+  margin-left: -8px;
+  vertical-align: middle;
 }
 
-mat-dialog-actions {
-  padding: 16px 0;
-  gap: 8px;
+::ng-deep .mat-mdc-dialog-content {
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+button {
+  min-width: 120px;
+  
+  .mat-spinner {
+    display: inline-block;
+    margin-right: 8px;
+  }
 }

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { CreateEmployeeRequest } from '../employees.service';
+import { CreateEmployeeRequest, EmployeesService } from '../employees.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-add-employee-dialog',
@@ -10,10 +11,12 @@ import { CreateEmployeeRequest } from '../employees.service';
 })
 export class AddEmployeeDialogComponent {
   employeeForm: FormGroup;
+  isLoading = false;
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<AddEmployeeDialogComponent>
+    private dialogRef: MatDialogRef<AddEmployeeDialogComponent>,
+    private employeesService: EmployeesService,
   ) {
     this.employeeForm = this.fb.group({
       name: ['', Validators.required],
@@ -26,8 +29,20 @@ export class AddEmployeeDialogComponent {
 
   onSubmit(): void {
     if (this.employeeForm.valid) {
+      this.isLoading = true;
       const employeeData: CreateEmployeeRequest = this.employeeForm.value;
-      this.dialogRef.close(employeeData);
+
+      this.employeesService.createEmployee(employeeData)
+        .pipe(finalize(() => this.isLoading = false))
+        .subscribe({
+          next: () => {
+            this.employeesService.toastr.success('Employee added successfully');
+            this.dialogRef.close(true);
+          },
+          error: (error) => {
+            this.employeesService.toastr.error('Failed to add employee');
+          }
+        });
     }
   }
 
