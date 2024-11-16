@@ -1,5 +1,6 @@
 package com.igym.controller;
 
+import com.igym.dto.EmployeeDTO;
 import com.igym.entity.Employee;
 import com.igym.service.EmployeeService;
 import jakarta.validation.Valid;
@@ -20,9 +21,9 @@ public class EmployeeController {
 
     @GetMapping("/profile")
     @PreAuthorize("hasRole('EMPLOYEE') or hasRole('MANAGER')")
-    public ResponseEntity<Employee> getProfile(Authentication authentication) {
+    public ResponseEntity<EmployeeDTO> getProfile(Authentication authentication) {
         Employee employee = employeeService.getEmployeeProfile(authentication.getName());
-        return ResponseEntity.ok(employee);
+        return ResponseEntity.ok(EmployeeDTO.fromEntity(employee));
     }
 
     @PostMapping("/change-password")
@@ -44,7 +45,7 @@ public class EmployeeController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody CreateEmployeeRequest request) {
+    public ResponseEntity<EmployeeDTO> createEmployee(@Valid @RequestBody CreateEmployeeRequest request) {
         Employee employee = employeeService.createEmployee(
             request.getName(),
             request.getLastName(),
@@ -53,7 +54,7 @@ public class EmployeeController {
             request.getPosition(),
             Employee.Role.EMPLOYEE
         );
-        return ResponseEntity.ok(employee);
+        return ResponseEntity.ok(EmployeeDTO.fromEntity(employee));
     }
 
     @Data
