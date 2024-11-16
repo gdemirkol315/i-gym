@@ -35,8 +35,8 @@ export class AuthService {
   }
 
   private checkInitialAuth(): void {
-    const token = localStorage.getItem('token');
-    const role = localStorage.getItem('userRole');
+    const token = sessionStorage.getItem('token');
+    const role = sessionStorage.getItem('userRole');
     if (token) {
       this.isAuthenticatedSubject.next(true);
       this.userRoleSubject.next(role);
@@ -49,9 +49,9 @@ export class AuthService {
       password
     }).pipe(
       tap(response => {
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('userRole', response.role);
-        localStorage.setItem('employeeId', response.employeeId.toString());
+        sessionStorage.setItem('token', response.token);
+        sessionStorage.setItem('userRole', response.role);
+        sessionStorage.setItem('employeeId', response.employeeId.toString());
         this.isAuthenticatedSubject.next(true);
         this.userRoleSubject.next(response.role);
       })
@@ -59,15 +59,15 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('employeeId');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('userRole');
+    sessionStorage.removeItem('employeeId');
     this.isAuthenticatedSubject.next(false);
     this.userRoleSubject.next(null);
     this.router.navigate(['/auth/login']);
   }
 
   isManager(): boolean {
-    return localStorage.getItem('userRole') === 'MANAGER';
+    return sessionStorage.getItem('userRole') === 'MANAGER';
   }
 }
