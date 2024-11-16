@@ -4,6 +4,12 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { CreateEmployeeRequest, EmployeesService } from '../employees.service';
 import { finalize } from 'rxjs';
 
+enum EmployeeRole {
+  MANAGER = 'MANAGER',
+  EMPLOYEE = 'EMPLOYEE',
+  SUPERVISOR = 'SUPERVISOR'
+}
+
 @Component({
   selector: 'app-add-employee-dialog',
   templateUrl: './add-employee-dialog.component.html',
@@ -12,6 +18,7 @@ import { finalize } from 'rxjs';
 export class AddEmployeeDialogComponent {
   employeeForm: FormGroup;
   isLoading = false;
+  roles = Object.values(EmployeeRole);
 
   constructor(
     private fb: FormBuilder,
@@ -22,8 +29,8 @@ export class AddEmployeeDialogComponent {
       name: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      address: ['', Validators.required],
-      position: ['', Validators.required]
+      address: ['', ],
+      role: ['', Validators.required]
     });
   }
 

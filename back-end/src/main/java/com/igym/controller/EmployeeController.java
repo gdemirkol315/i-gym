@@ -82,8 +82,7 @@ public class EmployeeController {
                     request.getLastName(),
                     request.getAddress(),
                     request.getEmail(),
-                    request.getPosition(),
-                    Employee.Role.EMPLOYEE
+                    request.getRole()
             );
             return ResponseEntity.ok(EmployeeDTO.fromEntity(employee));
         } catch (RuntimeException e) {
@@ -104,8 +103,7 @@ public class EmployeeController {
         @Email(message = "Invalid email format")
         private String email;
 
-        @NotBlank(message = "Position is required")
-        private String position;
+        private Employee.Role role;
     }
 
     @Data

@@ -32,16 +32,17 @@
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Address</mat-label>
       <input matInput formControlName="address" placeholder="Enter address">
-      <mat-error *ngIf="employeeForm.get('address')?.hasError('required')">
-        Address is required
-      </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Position</mat-label>
-      <input matInput formControlName="position" placeholder="Enter position">
-      <mat-error *ngIf="employeeForm.get('position')?.hasError('required')">
-        Position is required
+      <mat-label>Role</mat-label>
+      <mat-select formControlName="role">
+        <mat-option *ngFor="let role of roles" [value]="role">
+          {{role}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="employeeForm.get('role')?.hasError('required')">
+        Role is required
       </mat-error>
     </mat-form-field>
   </mat-dialog-content>

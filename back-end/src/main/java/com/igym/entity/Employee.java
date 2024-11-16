@@ -32,9 +32,6 @@ public class Employee {
     @Column
     private String phone;
 
-    @Column(nullable = false)
-    private String position;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
@@ -54,7 +51,8 @@ public class Employee {
 
     public enum Role {
         MANAGER,
-        EMPLOYEE
+        EMPLOYEE,
+        SUPERVISOR
     }
 
     @Column(nullable = false, unique = true)
@@ -65,7 +63,6 @@ public class Employee {
         return "Employee{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", position='" + position + '\'' +
                 ", role=" + role +
                 ", email='" + email + '\'' +
                 '}';

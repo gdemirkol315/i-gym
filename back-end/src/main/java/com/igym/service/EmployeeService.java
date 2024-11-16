@@ -28,7 +28,7 @@ public class EmployeeService {
     }
 
     @Transactional
-    public Employee createEmployee(String name, String lastName, String address, String email, String position, Employee.Role role) {
+    public Employee createEmployee(String name, String lastName, String address, String email,Employee.Role role) {
         if (employeeRepository.existsByEmail(email)) {
             throw new RuntimeException("Email already exists");
         }
@@ -53,7 +53,6 @@ public class EmployeeService {
         employee.setLastName(lastName);
         employee.setAddress(address);
         employee.setEmail(email);
-        employee.setPosition(position);
         employee.setRole(role);
 
         // Create and set salt
@@ -138,7 +137,6 @@ public class EmployeeService {
                 "Admin",
                 "Admin Address",
                 "admin@admin.com",
-                "Administrator",
                 Employee.Role.MANAGER
             );
         }

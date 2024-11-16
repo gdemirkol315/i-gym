@@ -11,7 +11,6 @@ public class EmployeeDTO {
     private String name;
     private String lastName;
     private String address;
-    private String position;
     private String phone;
     private Employee.Role role;
     private String email;
@@ -23,7 +22,6 @@ public class EmployeeDTO {
         dto.setName(employee.getName());
         dto.setLastName(employee.getLastName());
         dto.setAddress(employee.getAddress());
-        dto.setPosition(employee.getPosition());
         dto.setRole(employee.getRole());
         dto.setEmail(employee.getEmail());
         dto.setCreatedAt(employee.getCreatedAt());

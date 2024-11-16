@@ -11,5 +11,4 @@ public class LoginResponse {
     private Long employeeId;
     private String name;
     private Employee.Role role;
-    private String position;
 }

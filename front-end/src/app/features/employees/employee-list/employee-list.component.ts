@@ -41,13 +41,7 @@ export class EmployeeListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.employeesService.createEmployee(result).subscribe({
-          next: () => {
-            this.loadEmployees();
-          },
-          error: () => {
-          }
-        });
+        this.loadEmployees();
       }
     });
   }

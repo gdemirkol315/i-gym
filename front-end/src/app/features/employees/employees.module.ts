@@ -13,6 +13,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { EmployeesRoutingModule } from './employees-routing.module';
 import { EmployeeListComponent } from './employee-list/employee-list.component';
 import { AddEmployeeDialogComponent } from './add-employee-dialog/add-employee-dialog.component';
+import {MatOption, MatSelect} from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,9 @@ import { AddEmployeeDialogComponent } from './add-employee-dialog/add-employee-d
     MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule,
-    EmployeesRoutingModule
+    EmployeesRoutingModule,
+    MatSelect,
+    MatOption
   ]
 })
 export class EmployeesModule { }

@@ -5,6 +5,6 @@ export interface Employee {
     address: string;
     position: string;
     phone: string;
-    role: 'MANAGER' | 'EMPLOYEE';
+    role: 'MANAGER' | 'EMPLOYEE' | 'SUPERVISOR';
     email: string;
 }
