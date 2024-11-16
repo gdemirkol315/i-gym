@@ -40,7 +40,7 @@ export class AddEmployeeDialogComponent {
             this.dialogRef.close(true);
           },
           error: (error) => {
-            this.employeesService.toastr.error('Failed to add employee');
+            this.employeesService.toastr.error('Failed to add employee! Email might already be in use!');
           }
         });
     }
