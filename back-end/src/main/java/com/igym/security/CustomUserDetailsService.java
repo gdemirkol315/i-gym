@@ -26,9 +26,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Employee employee = employeeRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Employee not found with username: " + username));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Employee employee = employeeRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Employee not found with email: " + email));
 
         Salt salt = saltRepository.findByEmployeeId(employee.getId())
                 .orElseThrow(() -> new RuntimeException("Salt not found for employee"));
@@ -36,7 +36,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         // The stored password in UserDetails must be the hashed version that matches what we'll create
         // from the salted password during authentication
         return new User(
-                employee.getCredentials().getUsername(),
+                employee.getEmail(),
                 employee.getCredentials().getHashedPassword(),
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + employee.getRole().name()))
         );

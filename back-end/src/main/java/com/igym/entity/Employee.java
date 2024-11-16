@@ -54,7 +54,7 @@ public class Employee {
         EMPLOYEE
     }
 
-    @Column
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Override
@@ -64,6 +64,7 @@ public class Employee {
                 ", name='" + name + '\'' +
                 ", position='" + position + '\'' +
                 ", role=" + role +
+                ", email='" + email + '\'' +
                 '}';
     }
 }

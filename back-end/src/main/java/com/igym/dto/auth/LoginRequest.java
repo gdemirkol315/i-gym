@@ -1,22 +1,24 @@
 package com.igym.dto.auth;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Email;
 import lombok.Data;
 
 @Data
 public class LoginRequest {
-    @NotBlank(message = "Username is required")
-    private String username;
+    @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email format")
+    private String email;
 
     @NotBlank(message = "Password is required")
     private String password;
 
-    public @NotBlank(message = "Username is required") String getUsername() {
-        return username;
+    public @NotBlank(message = "Email is required") @Email(message = "Invalid email format") String getEmail() {
+        return email;
     }
 
-    public void setUsername(@NotBlank(message = "Username is required") String username) {
-        this.username = username;
+    public void setEmail(@NotBlank(message = "Email is required") @Email(message = "Invalid email format") String email) {
+        this.email = email;
     }
 
     public @NotBlank(message = "Password is required") String getPassword() {

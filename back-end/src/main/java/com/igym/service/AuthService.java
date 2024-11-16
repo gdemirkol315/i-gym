@@ -31,9 +31,9 @@ public class AuthService {
 
     @Transactional
     public LoginResponse authenticate(LoginRequest request) {
-        // First find the employee by username
-        Employee employee = employeeRepository.findByUsername(request.getUsername())
-            .orElseThrow(() -> new RuntimeException("Employee not found with username: " + request.getUsername()));
+        // First find the employee by email
+        Employee employee = employeeRepository.findByEmail(request.getEmail())
+            .orElseThrow(() -> new RuntimeException("Employee not found with email: " + request.getEmail()));
 
         // Get the salt for this employee
         Salt salt = saltRepository.findByEmployeeId(employee.getId())
@@ -41,7 +41,7 @@ public class AuthService {
 
         // Create UserDetails for token generation
         UserDetails userDetails = new User(
-            employee.getCredentials().getUsername(),
+            employee.getEmail(),
             employee.getCredentials().getHashedPassword(),
             Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + employee.getRole().name()))
         );
@@ -52,7 +52,7 @@ public class AuthService {
         // Authenticate with raw salted password
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
-                request.getUsername(),
+                request.getEmail(),
                 saltedPassword
             )
         );

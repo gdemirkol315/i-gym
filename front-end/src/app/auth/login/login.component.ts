@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {
     this.loginForm = this.formBuilder.group({
-      username: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
   }
@@ -38,9 +38,9 @@ export class LoginComponent implements OnInit {
     }
 
     this.isLoading = true;
-    const { username, password } = this.loginForm.value;
+    const { email, password } = this.loginForm.value;
 
-    this.authService.login(username, password).subscribe({
+    this.authService.login(email, password).subscribe({
       next: () => {
         this.router.navigate([this.returnUrl]);
       },
@@ -53,5 +53,15 @@ export class LoginComponent implements OnInit {
         );
       }
     });
+  }
+
+  getErrorMessage(field: string): string {
+    if (this.loginForm.get(field)?.hasError('required')) {
+      return `${field.charAt(0).toUpperCase() + field.slice(1)} is required`;
+    }
+    if (field === 'email' && this.loginForm.get('email')?.hasError('email')) {
+      return 'Invalid email format';
+    }
+    return '';
   }
 }

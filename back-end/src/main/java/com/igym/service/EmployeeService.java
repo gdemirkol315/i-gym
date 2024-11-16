@@ -12,15 +12,30 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
 public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
+    private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
 
     @Transactional
-    public Employee createEmployee(String name, String username, String password, String position, Employee.Role role) {
+    public Employee createEmployee(String name, String lastName, String address, String email, String position, Employee.Role role) {
+        if (employeeRepository.existsByEmail(email)) {
+            throw new RuntimeException("Email already exists");
+        }
+
+        // Generate a random password
+        String password = generateRandomPassword();
+
+        //todo delete
+        if (email.equals("admin@admin.com")){
+            password = "123456";
+        }
+
         // Generate a random salt
         SecureRandom random = new SecureRandom();
         byte[] saltBytes = new byte[16];
@@ -30,6 +45,9 @@ public class EmployeeService {
         // Create employee
         Employee employee = new Employee();
         employee.setName(name);
+        employee.setLastName(lastName);
+        employee.setAddress(address);
+        employee.setEmail(email);
         employee.setPosition(position);
         employee.setRole(role);
 
@@ -45,21 +63,26 @@ public class EmployeeService {
         
         Credentials credentials = new Credentials();
         credentials.setEmployee(employee);
-        credentials.setUsername(username);
         credentials.setHashedPassword(hashedPassword);
         employee.setCredentials(credentials);
 
-        return employeeRepository.save(employee);
+        // Save employee
+        Employee savedEmployee = employeeRepository.save(employee);
+
+        // Send email with credentials
+        emailService.sendPasswordEmail(email, password);
+
+        return savedEmployee;
     }
 
-    public Employee getEmployeeProfile(String username) {
-        return employeeRepository.findByUsername(username)
+    public Employee getEmployeeProfile(String email) {
+        return employeeRepository.findByEmail(email)
             .orElseThrow(() -> new UsernameNotFoundException("Employee not found"));
     }
 
     @Transactional
-    public boolean changePassword(String username, String oldPassword, String newPassword) {
-        Employee employee = employeeRepository.findByUsername(username)
+    public boolean changePassword(String email, String oldPassword, String newPassword) {
+        Employee employee = employeeRepository.findByEmail(email)
             .orElseThrow(() -> new UsernameNotFoundException("Employee not found"));
 
         String saltStr = employee.getSalt().getSalt();
@@ -77,5 +100,31 @@ public class EmployeeService {
         employeeRepository.save(employee);
         
         return true;
+    }
+
+    private String generateRandomPassword() {
+        Random random = new SecureRandom();
+        StringBuilder password = new StringBuilder();
+        
+        // Generate a 12-character password
+        for (int i = 0; i < 12; i++) {
+            password.append(CHARS.charAt(random.nextInt(CHARS.length())));
+        }
+        
+        return password.toString();
+    }
+
+    @Transactional
+    public void createInitialAdminAccount() {
+        if (!employeeRepository.existsByEmail("admin@admin.com")) {
+            createEmployee(
+                "Initial",
+                "Admin",
+                "Admin Address",
+                "admin@admin.com",
+                "Administrator",
+                Employee.Role.MANAGER
+            );
+        }
     }
 }

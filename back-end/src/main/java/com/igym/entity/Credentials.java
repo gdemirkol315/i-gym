@@ -17,9 +17,6 @@ public class Credentials {
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
-    @Column(nullable = false, unique = true)
-    private String username;
-
     @Column(name = "hashed_pass", nullable = false)
     private String hashedPassword;
 
@@ -27,7 +24,7 @@ public class Credentials {
     public String toString() {
         return "Credentials{" +
                 "employeeId=" + employeeId +
-                ", username='" + username + '\'' +
+                ", email='" + (employee != null ? employee.getEmail() : null) + '\'' +
                 '}';
     }
 }
