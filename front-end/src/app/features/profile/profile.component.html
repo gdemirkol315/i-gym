@@ -3,40 +3,72 @@
     <mat-card-header>
       <mat-card-title>Profile Details</mat-card-title>
     </mat-card-header>
-    
+
     <mat-card-content>
       <div class="profile-details">
         <div class="detail-row">
           <span class="label">Name:</span>
           <span class="value">{{employee?.name}} {{employee?.lastName}}</span>
         </div>
-        
+
+        <div class="detail-row">
+          <span class="label">Telephone:</span>
+          <ng-container *ngIf="!isEditing">
+            <span class="value">{{employee?.phone}}</span>
+          </ng-container>
+          <ng-container *ngIf="isEditing">
+            <mat-form-field class="edit-field">
+              <input matInput [(ngModel)]="editedPhone" placeholder="Phone">
+            </mat-form-field>
+          </ng-container>
+        </div>
+
         <div class="detail-row">
           <span class="label">Email:</span>
           <span class="value">{{employee?.email}}</span>
         </div>
-        
+
         <div class="detail-row">
           <span class="label">Position:</span>
           <span class="value">{{employee?.position}}</span>
         </div>
-        
+
         <div class="detail-row">
           <span class="label">Role:</span>
           <span class="value">{{employee?.role}}</span>
         </div>
-        
+
         <div class="detail-row">
           <span class="label">Address:</span>
-          <span class="value">{{employee?.address}}</span>
+          <ng-container *ngIf="!isEditing">
+            <span class="value">{{employee?.address}}</span>
+          </ng-container>
+          <ng-container *ngIf="isEditing">
+            <mat-form-field class="edit-field">
+              <input matInput [(ngModel)]="editedAddress" placeholder="Address">
+            </mat-form-field>
+          </ng-container>
         </div>
       </div>
     </mat-card-content>
-    
+
     <mat-card-actions>
-      <button mat-raised-button color="primary" (click)="openChangePasswordDialog()">
-        Change Password
-      </button>
+      <ng-container *ngIf="!isEditing">
+        <button mat-raised-button color="primary" (click)="openChangePasswordDialog()">
+          Change Password
+        </button>
+        <button mat-raised-button color="accent" (click)="startEditing()">
+          Edit Profile
+        </button>
+      </ng-container>
+      <ng-container *ngIf="isEditing">
+        <button mat-raised-button color="primary" (click)="saveChanges()">
+          Save Changes
+        </button>
+        <button mat-raised-button (click)="cancelEditing()">
+          Cancel
+        </button>
+      </ng-container>
     </mat-card-actions>
   </mat-card>
 

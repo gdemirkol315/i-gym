@@ -107,6 +107,17 @@ public class EmployeeService {
         return true;
     }
 
+    @Transactional
+    public Employee updateProfile(String email, String phone, String address) {
+        Employee employee = employeeRepository.findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("Employee not found"));
+        
+        employee.setPhone(phone);
+        employee.setAddress(address);
+        
+        return employeeRepository.save(employee);
+    }
+
     private String generateRandomPassword() {
         Random random = new SecureRandom();
         StringBuilder password = new StringBuilder();

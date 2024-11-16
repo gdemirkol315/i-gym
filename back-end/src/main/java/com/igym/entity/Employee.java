@@ -29,6 +29,9 @@ public class Employee {
     @Column
     private String address;
 
+    @Column
+    private String phone;
+
     @Column(nullable = false)
     private String position;
 

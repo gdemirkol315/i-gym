@@ -21,4 +21,11 @@ export class ProfileService {
       newPassword
     });
   }
+
+  updateProfile(phone: string, address: string): Observable<Employee> {
+    return this.http.post<Employee>(`${this.apiUrl}/update-profile`, {
+      phone,
+      address
+    });
+  }
 }

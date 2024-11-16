@@ -13,6 +13,9 @@ export class ProfileComponent implements OnInit {
   employee: Employee | null = null;
   loading = true;
   error = '';
+  isEditing = false;
+  editedPhone = '';
+  editedAddress = '';
 
   constructor(
     private profileService: ProfileService,
@@ -47,5 +50,29 @@ export class ProfileComponent implements OnInit {
         // Optional: Show success message
       }
     });
+  }
+
+  startEditing() {
+    this.isEditing = true;
+    this.editedPhone = this.employee?.phone || '';
+    this.editedAddress = this.employee?.address || '';
+  }
+
+  saveChanges() {
+    if (!this.employee) return;
+
+    this.profileService.updateProfile(this.editedPhone, this.editedAddress).subscribe({
+      next: (updatedEmployee: Employee) => {
+        this.employee = updatedEmployee;
+        this.isEditing = false;
+      },
+      error: (err: any) => {
+        this.error = 'Failed to update profile';
+      }
+    });
+  }
+
+  cancelEditing() {
+    this.isEditing = false;
   }
 }

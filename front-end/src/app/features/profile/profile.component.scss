@@ -1,47 +1,51 @@
 .profile-container {
   padding: 20px;
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
-}
 
-.profile-details {
-  padding: 20px 0;
-}
+  .loading-spinner {
+    margin: 20px auto;
+  }
 
-.detail-row {
-  display: flex;
-  margin-bottom: 15px;
-  align-items: baseline;
-}
+  .error-card {
+    margin-top: 20px;
+    .error-message {
+      color: red;
+    }
+  }
 
-.label {
-  font-weight: 500;
-  min-width: 100px;
-  color: rgba(0, 0, 0, 0.7);
-}
+  .profile-details {
+    padding: 20px 0;
 
-.value {
-  flex: 1;
-  padding-left: 20px;
-}
+    .detail-row {
+      display: flex;
+      margin-bottom: 20px;
+      align-items: center;
 
-.loading-spinner {
-  margin: 50px auto;
-}
+      .label {
+        font-weight: 500;
+        min-width: 120px;
+      }
 
-.error-card {
-  margin-top: 20px;
-  background-color: #fff5f5;
-}
+      .value {
+        color: #666;
+      }
 
-.error-message {
-  color: #dc3545;
-  text-align: center;
-  margin: 0;
-}
+      .edit-field {
+        width: 100%;
+        max-width: 300px;
+        margin: -1.25em 0;
+      }
+    }
+  }
 
-mat-card-actions {
-  padding: 16px;
-  display: flex;
-  justify-content: flex-end;
+  mat-card-actions {
+    padding: 16px;
+    display: flex;
+    gap: 10px;
+
+    button {
+      min-width: 120px;
+    }
+  }
 }

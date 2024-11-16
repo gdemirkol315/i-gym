@@ -60,6 +60,19 @@ public class EmployeeController {
         }
     }
 
+    @PostMapping("/update-profile")
+    @PreAuthorize("hasRole('EMPLOYEE') or hasRole('MANAGER')")
+    public ResponseEntity<EmployeeDTO> updateProfile(
+            Authentication authentication,
+            @Valid @RequestBody UpdateProfileRequest request) {
+        Employee employee = employeeService.updateProfile(
+                authentication.getName(),
+                request.getPhone(),
+                request.getAddress()
+        );
+        return ResponseEntity.ok(EmployeeDTO.fromEntity(employee));
+    }
+
     @PostMapping("/create")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<?> createEmployee(@Valid @RequestBody CreateEmployeeRequest request) {
@@ -102,5 +115,11 @@ public class EmployeeController {
 
         @NotBlank(message = "New password is required")
         private String newPassword;
+    }
+
+    @Data
+    public static class UpdateProfileRequest {
+        private String phone;
+        private String address;
     }
 }
