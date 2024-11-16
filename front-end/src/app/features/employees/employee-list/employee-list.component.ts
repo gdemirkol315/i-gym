@@ -11,7 +11,7 @@ import {ToastrService} from 'ngx-toastr';
 })
 export class EmployeeListComponent implements OnInit {
   employees: Employee[] = [];
-  displayedColumns: string[] = ['name', 'lastName', 'email', 'address', 'position', 'role'];
+  displayedColumns: string[] = ['name', 'lastName', 'email', 'phone', 'address', 'role'];
 
   constructor(
     private employeesService: EmployeesService,

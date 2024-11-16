@@ -30,6 +30,7 @@ export class AddEmployeeDialogComponent {
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       address: ['', ],
+      phone: ['', ],
       role: ['', Validators.required]
     });
   }

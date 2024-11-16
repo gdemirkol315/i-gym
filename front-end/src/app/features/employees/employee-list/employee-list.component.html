@@ -23,10 +23,16 @@
       <mat-cell *matCellDef="let employee">{{employee.email}}</mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="phone">
+      <mat-header-cell *matHeaderCellDef>Phone</mat-header-cell>
+      <mat-cell *matCellDef="let employee">{{employee.phone}}</mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="address">
       <mat-header-cell *matHeaderCellDef>Address</mat-header-cell>
       <mat-cell *matCellDef="let employee">{{employee.address}}</mat-cell>
     </ng-container>
+
 
     <ng-container matColumnDef="role">
       <mat-header-cell *matHeaderCellDef>Role</mat-header-cell>
