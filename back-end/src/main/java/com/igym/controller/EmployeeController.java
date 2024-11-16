@@ -42,7 +42,7 @@ public class EmployeeController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/create")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<Employee> createEmployee(@Valid @RequestBody CreateEmployeeRequest request) {
         Employee employee = employeeService.createEmployee(

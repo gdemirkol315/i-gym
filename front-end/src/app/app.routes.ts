@@ -38,6 +38,11 @@ export const routes: Routes = [
           .then(m => m.ProfileModule)
       },
       {
+        path: 'employees',
+        loadChildren: () => import('./features/employees/employees.module')
+          .then(m => m.EmployeesModule)
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'

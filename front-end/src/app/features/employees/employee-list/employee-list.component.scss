@@ -1,0 +1,32 @@
+.employee-list-container {
+  padding: 24px;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+
+    h1 {
+      margin: 0;
+    }
+
+    button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+
+  mat-table {
+    width: 100%;
+
+    mat-header-cell {
+      font-weight: bold;
+    }
+
+    mat-cell, mat-header-cell {
+      padding: 16px;
+    }
+  }
+}

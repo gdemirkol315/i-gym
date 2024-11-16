@@ -1,0 +1,44 @@
+<div class="employee-list-container">
+  <div class="header">
+    <h1>Employees</h1>
+    <button mat-raised-button color="primary" (click)="openAddEmployeeDialog()">
+      <mat-icon>add</mat-icon>
+      Add Employee
+    </button>
+  </div>
+
+  <mat-table [dataSource]="employees" class="mat-elevation-z4">
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+      <mat-cell *matCellDef="let employee">{{employee.name}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="lastName">
+      <mat-header-cell *matHeaderCellDef>Last Name</mat-header-cell>
+      <mat-cell *matCellDef="let employee">{{employee.lastName}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
+      <mat-cell *matCellDef="let employee">{{employee.email}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="address">
+      <mat-header-cell *matHeaderCellDef>Address</mat-header-cell>
+      <mat-cell *matCellDef="let employee">{{employee.address}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="position">
+      <mat-header-cell *matHeaderCellDef>Position</mat-header-cell>
+      <mat-cell *matCellDef="let employee">{{employee.position}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="role">
+      <mat-header-cell *matHeaderCellDef>Role</mat-header-cell>
+      <mat-cell *matCellDef="let employee">{{employee.role}}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</div>
