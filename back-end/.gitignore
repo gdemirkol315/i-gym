@@ -18,3 +18,8 @@ Thumbs.db
 
 # Generated files
 out/
+
+.env
+application-*.yml
+!application.yml.example
+!.env.example
