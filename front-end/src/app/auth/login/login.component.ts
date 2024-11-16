@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-    private snackBar: MatSnackBar
+    private toastr: ToastrService
   ) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -44,13 +44,9 @@ export class LoginComponent implements OnInit {
       next: () => {
         this.router.navigate([this.returnUrl]);
       },
-      error: (error) => {
+      error: () => {
         this.isLoading = false;
-        this.snackBar.open(
-          error.error?.message || 'Login failed. Please try again.',
-          'Close',
-          { duration: 5000 }
-        );
+        this.toastr.error('Login failed. Please try again.');
       }
     });
   }

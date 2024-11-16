@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { EmployeesService, Employee } from '../employees.service';
 import { AddEmployeeDialogComponent } from '../add-employee-dialog/add-employee-dialog.component';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-employee-list',
@@ -16,7 +16,7 @@ export class EmployeeListComponent implements OnInit {
   constructor(
     private employeesService: EmployeesService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -29,10 +29,7 @@ export class EmployeeListComponent implements OnInit {
         this.employees = data;
       },
       error: () => {
-        this.snackBar.open('Error loading employees', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'end'
-        });
+        this.toastr.error('Error loading employees');
       }
     });
   }

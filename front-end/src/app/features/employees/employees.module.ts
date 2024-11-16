@@ -8,7 +8,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { EmployeesRoutingModule } from './employees-routing.module';
@@ -30,7 +29,6 @@ import { AddEmployeeDialogComponent } from './add-employee-dialog/add-employee-d
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSnackBarModule,
     MatProgressSpinnerModule,
     EmployeesRoutingModule
   ]
