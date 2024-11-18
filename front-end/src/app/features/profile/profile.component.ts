@@ -47,7 +47,9 @@ export class ProfileComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'success') {
-        // Optional: Show success message
+        this.profileService.toastr.info('Password changed successfully');
+      } else {
+        this.profileService.toastr.error('There was an error while changing the password!');
       }
     });
   }
@@ -64,9 +66,11 @@ export class ProfileComponent implements OnInit {
     this.profileService.updateProfile(this.editedPhone, this.editedAddress).subscribe({
       next: (updatedEmployee: Employee) => {
         this.employee = updatedEmployee;
+        this.profileService.toastr.info('Profile updated successfully');
         this.isEditing = false;
       },
       error: (err: any) => {
+        this.profileService.toastr.error('There was an error updating profile!');
         this.error = 'Failed to update profile';
       }
     });
