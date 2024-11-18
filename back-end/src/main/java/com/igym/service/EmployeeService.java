@@ -117,6 +117,15 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
+    @Transactional
+    public Employee updateRole(Long employeeId, Employee.Role newRole) {
+        Employee employee = employeeRepository.findById(employeeId)
+            .orElseThrow(() -> new RuntimeException("Employee not found"));
+        
+        employee.setRole(newRole);
+        return employeeRepository.save(employee);
+    }
+
     private String generateRandomPassword() {
         Random random = new SecureRandom();
         StringBuilder password = new StringBuilder();

@@ -33,10 +33,28 @@
       <mat-cell *matCellDef="let employee">{{employee.address}}</mat-cell>
     </ng-container>
 
-
     <ng-container matColumnDef="role">
       <mat-header-cell *matHeaderCellDef>Role</mat-header-cell>
-      <mat-cell *matCellDef="let employee">{{employee.role}}</mat-cell>
+      <mat-cell *matCellDef="let employee">
+        <ng-container *ngIf="!editingRole[employee.id]">
+          {{employee.role}}
+          <button mat-icon-button (click)="startEditingRole(employee.id)" class="edit-button">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </ng-container>
+        <div *ngIf="editingRole[employee.id]" class="role-edit">
+          <mat-form-field appearance="outline" class="role-select">
+            <mat-select [value]="employee.role">
+              <mat-option *ngFor="let role of availableRoles" [value]="role" (click)="saveRole(employee, role)">
+                {{role}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button mat-icon-button color="warn" (click)="cancelEditingRole(employee.id)">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

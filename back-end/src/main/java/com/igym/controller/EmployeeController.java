@@ -6,6 +6,7 @@ import com.igym.service.EmployeeService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -73,6 +74,17 @@ public class EmployeeController {
         return ResponseEntity.ok(EmployeeDTO.fromEntity(employee));
     }
 
+    @PutMapping("/update-role")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<EmployeeDTO> updateRole(@Valid @RequestBody UpdateRoleRequest request) {
+        try {
+            Employee employee = employeeService.updateRole(request.getEmployeeId(), request.getRole());
+            return ResponseEntity.ok(EmployeeDTO.fromEntity(employee));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
     @PostMapping("/create")
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<?> createEmployee(@Valid @RequestBody CreateEmployeeRequest request) {
@@ -119,5 +131,14 @@ public class EmployeeController {
     public static class UpdateProfileRequest {
         private String phone;
         private String address;
+    }
+
+    @Data
+    public static class UpdateRoleRequest {
+        @NotNull(message = "Employee ID is required")
+        private Long employeeId;
+
+        @NotNull(message = "Role is required")
+        private Employee.Role role;
     }
 }

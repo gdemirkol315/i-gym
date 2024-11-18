@@ -9,11 +9,11 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
 
 import { EmployeesRoutingModule } from './employees-routing.module';
 import { EmployeeListComponent } from './employee-list/employee-list.component';
 import { AddEmployeeDialogComponent } from './add-employee-dialog/add-employee-dialog.component';
-import {MatOption, MatSelect} from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -31,9 +31,8 @@ import {MatOption, MatSelect} from '@angular/material/select';
     MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule,
-    EmployeesRoutingModule,
-    MatSelect,
-    MatOption
+    MatSelectModule,
+    EmployeesRoutingModule
   ]
 })
 export class EmployeesModule { }
