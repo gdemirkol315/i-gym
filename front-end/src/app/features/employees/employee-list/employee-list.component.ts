@@ -69,7 +69,12 @@ export class EmployeeListComponent implements OnInit {
       next: (updatedEmployee) => {
         const index = this.employees.findIndex(e => e.id === updatedEmployee.id);
         if (index !== -1) {
-          this.employees[index] = updatedEmployee;
+          // Create a new array with the updated employee
+          this.employees = [
+            ...this.employees.slice(0, index),
+            updatedEmployee,
+            ...this.employees.slice(index + 1)
+          ];
         }
         this.editingRole[employee.id] = false;
         this.toastr.success('Role updated successfully');
