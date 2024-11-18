@@ -1,32 +1,52 @@
 .employee-list-container {
-  padding: 24px;
+  padding: 20px;
 
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
 
     h1 {
       margin: 0;
     }
+  }
 
-    button {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+  .mat-table {
+    width: 100%;
+  }
+
+  .mat-cell {
+    position: relative;
+    
+    .edit-button {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    &:hover {
+      .edit-button {
+        opacity: 1;
+      }
     }
   }
 
-  mat-table {
-    width: 100%;
+  .role-edit {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 
-    mat-header-cell {
-      font-weight: bold;
-    }
-
-    mat-cell, mat-header-cell {
-      padding: 16px;
+    .role-select {
+      width: 150px;
+      margin: -1.25em 0;
+      
+      ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+        display: none;
+      }
     }
   }
 }
