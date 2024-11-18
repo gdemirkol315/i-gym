@@ -30,6 +30,9 @@ public class Customer {
     @Column(name = "photo_url")
     private String photoUrl;
 
+    @Column(name = "birth_date")
+    private LocalDateTime birthDate;
+
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ConsentForm> consentForms = new ArrayList<>();
 
