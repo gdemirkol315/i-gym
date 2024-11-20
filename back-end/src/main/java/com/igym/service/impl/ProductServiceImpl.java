@@ -39,6 +39,7 @@ public class ProductServiceImpl implements ProductService {
         product.setName(productDTO.getName());
         product.setCategory(productDTO.getCategory());
         product.setPrice(productDTO.getPrice().doubleValue());
+        product.setBarcode(productDTO.getBarcode());
         
         // Create and set inventory
         Inventory inventory = new Inventory();
@@ -77,6 +78,7 @@ public class ProductServiceImpl implements ProductService {
         dto.setCategory(product.getCategory());
         dto.setPrice(BigDecimal.valueOf(product.getPrice()));
         dto.setQuantity(product.getInventory() != null ? product.getInventory().getQuantityInStock() : 0);
+        dto.setBarcode(product.getBarcode());
         return dto;
     }
 

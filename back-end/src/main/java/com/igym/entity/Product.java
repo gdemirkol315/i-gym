@@ -23,6 +23,9 @@ public class Product {
     @Column(nullable = false)
     private Double price;
 
+    @Column(unique = true)
+    private String barcode;
+
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
     private Inventory inventory;
 

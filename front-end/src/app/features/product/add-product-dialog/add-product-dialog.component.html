@@ -12,6 +12,11 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline">
+        <mat-label>Barcode</mat-label>
+        <input matInput formControlName="barcode">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
         <mat-label>Category</mat-label>
         <input matInput formControlName="category" required>
         <mat-error *ngIf="productForm.get('category')?.hasError('required')">

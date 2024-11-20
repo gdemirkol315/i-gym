@@ -11,6 +11,7 @@ export interface Product {
   category: string;
   price: number;
   quantity: number;
+  barcode?: string;
 }
 
 export interface CreateProductRequest {
@@ -18,6 +19,7 @@ export interface CreateProductRequest {
   category: string;
   price: number;
   quantity: number;
+  barcode?: string;
 }
 
 export interface EntryProduct {

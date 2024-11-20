@@ -13,7 +13,7 @@ export class ProductListComponent implements OnInit {
   products: Product[] = [];
   entryProducts: EntryProduct[] = [];
 
-  productColumns: string[] = ['id', 'name', 'category', 'price', 'quantity'];
+  productColumns: string[] = ['id', 'name', 'barcode', 'category', 'price', 'quantity'];
   entryProductColumns: string[] = ['id', 'name', 'duration', 'maxEntries', 'price', 'entryType'];
 
   constructor(

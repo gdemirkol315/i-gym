@@ -20,6 +20,7 @@ export class AddProductDialogComponent {
   ) {
     this.productForm = this.fb.group({
       name: ['', Validators.required],
+      barcode: [''],
       category: ['', Validators.required],
       price: ['', [Validators.required, Validators.min(0)]],
       quantity: ['', [Validators.required, Validators.min(0)]]

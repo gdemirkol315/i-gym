@@ -8,6 +8,7 @@ public class ProductDTO {
     private String category;
     private BigDecimal price;
     private Integer quantity;
+    private String barcode;
 
     // Getters and Setters
     public Long getId() {
@@ -48,5 +49,13 @@ public class ProductDTO {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
     }
 }
