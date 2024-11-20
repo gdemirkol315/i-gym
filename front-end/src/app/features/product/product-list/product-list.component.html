@@ -1,1 +1,88 @@
-<p>product-list works!</p>
+<div class="product-list-container">
+  <!-- Products Section -->
+  <div class="section">
+    <div class="header">
+      <h2>Products</h2>
+      <button mat-raised-button color="primary" (click)="openAddProductDialog()">
+        <mat-icon>add</mat-icon>
+        Add New Product
+      </button>
+    </div>
+
+    <mat-table [dataSource]="products" class="mat-elevation-z4">
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
+        <mat-cell *matCellDef="let product">{{product.id}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+        <mat-cell *matCellDef="let product">{{product.name}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="category">
+        <mat-header-cell *matHeaderCellDef>Category</mat-header-cell>
+        <mat-cell *matCellDef="let product">{{product.category}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="price">
+        <mat-header-cell *matHeaderCellDef>Price</mat-header-cell>
+        <mat-cell *matCellDef="let product">{{product.price | currency}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="quantity">
+        <mat-header-cell *matHeaderCellDef>Quantity</mat-header-cell>
+        <mat-cell *matCellDef="let product">{{product.quantity}}</mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="productColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: productColumns;"></mat-row>
+    </mat-table>
+  </div>
+
+  <!-- Entry Products Section -->
+  <div class="section">
+    <div class="header">
+      <h2>Entry Products</h2>
+      <button mat-raised-button color="primary" (click)="openAddEntryProductDialog()">
+        <mat-icon>add</mat-icon>
+        Add Entry Product
+      </button>
+    </div>
+
+    <mat-table [dataSource]="entryProducts" class="mat-elevation-z4">
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
+        <mat-cell *matCellDef="let product">{{product.id}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+        <mat-cell *matCellDef="let product">{{product.name}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="duration">
+        <mat-header-cell *matHeaderCellDef>Duration (days)</mat-header-cell>
+        <mat-cell *matCellDef="let product">{{product.duration || 'N/A'}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="maxEntries">
+        <mat-header-cell *matHeaderCellDef>Max Entries</mat-header-cell>
+        <mat-cell *matCellDef="let product">{{product.maxEntries || 'Unlimited'}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="price">
+        <mat-header-cell *matHeaderCellDef>Price</mat-header-cell>
+        <mat-cell *matCellDef="let product">{{product.price | currency}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="entryType">
+        <mat-header-cell *matHeaderCellDef>Entry Type</mat-header-cell>
+        <mat-cell *matCellDef="let product">{{product.entryType}}</mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="entryProductColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: entryProductColumns;"></mat-row>
+    </mat-table>
+  </div>
+</div>
