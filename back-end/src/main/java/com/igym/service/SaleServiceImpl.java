@@ -1,19 +1,18 @@
 package com.igym.service;
 
 import com.igym.dto.SaleDTO;
-import com.igym.entity.Customer;
-import com.igym.entity.Product;
-import com.igym.entity.ProductConsumption;
-import com.igym.entity.Sale;
+import com.igym.entity.*;
 import com.igym.repository.CustomerRepository;
 import com.igym.repository.ProductRepository;
 import com.igym.repository.SaleRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
+import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,37 +23,45 @@ public class SaleServiceImpl implements SaleService {
     private final SaleRepository saleRepository;
     private final CustomerRepository customerRepository;
     private final ProductRepository productRepository;
+    private final InventoryService inventoryService;
 
     @Override
     @Transactional
     public SaleDTO createSale(SaleDTO saleDTO) {
-        Customer customer = customerRepository.findById(saleDTO.getCustomerId())
-            .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
+        try {
+            Customer customer = customerRepository.findById(saleDTO.getCustomerId())
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
 
-        Sale sale = new Sale();
-        sale.setCustomer(customer);
-        sale.setSaleDate(LocalDateTime.now());
-        sale.setSubtotal(saleDTO.getSubtotal());
-        sale.setTaxRate(saleDTO.getTaxRate());
-        sale.setTaxAmount(saleDTO.getTaxAmount());
-        sale.setDiscountPercentage(saleDTO.getDiscountPercentage());
-        sale.setDiscountAmount(saleDTO.getDiscountAmount());
-        sale.setTotal(saleDTO.getTotal());
-        sale.setPaymentMethod(saleDTO.getPaymentMethod());
+            // Validate stock for all items before processing
+            for (SaleDTO.SaleItemDTO itemDTO : saleDTO.getItems()) {
+                inventoryService.validateStock(itemDTO.getProductId(), itemDTO.getQuantity());
+            }
 
-        // Create ProductConsumption entries for each item
-        List<ProductConsumption> items = saleDTO.getItems().stream()
-            .map(itemDTO -> {
+            Sale sale = new Sale();
+            sale.setCustomer(customer);
+            sale.setSaleDate(LocalDateTime.now());
+            sale.setSubtotal(saleDTO.getSubtotal());
+            sale.setTaxRate(saleDTO.getTaxRate());
+            sale.setTaxAmount(saleDTO.getTaxAmount());
+            sale.setDiscountPercentage(saleDTO.getDiscountPercentage());
+            sale.setDiscountAmount(saleDTO.getDiscountAmount());
+            sale.setTotal(saleDTO.getTotal());
+            sale.setPaymentMethod(saleDTO.getPaymentMethod());
+
+            List<ProductConsumption> items = new ArrayList<>();
+            
+            // Process each item
+            for (SaleDTO.SaleItemDTO itemDTO : saleDTO.getItems()) {
                 Product product = productRepository.findById(itemDTO.getProductId())
                     .orElseThrow(() -> new EntityNotFoundException("Product not found"));
-                
-                // Update product stock
-                int newStock = product.getQuantityInStock() - itemDTO.getQuantity();
-                if (newStock < 0) {
-                    throw new IllegalStateException("Insufficient stock for product: " + product.getName());
-                }
-                product.setQuantityInStock(newStock);
-                productRepository.save(product);
+
+                // Update inventory
+                inventoryService.processStockForSale(
+                    itemDTO.getProductId(),
+                    itemDTO.getQuantity(),
+                    sale.getId(),
+                    1L  // TODO: Get actual employee ID from security context
+                );
 
                 // Create consumption record
                 ProductConsumption consumption = new ProductConsumption();
@@ -64,13 +71,16 @@ public class SaleServiceImpl implements SaleService {
                 consumption.setQuantity(itemDTO.getQuantity());
                 consumption.setPricePerUnit(itemDTO.getPricePerUnit());
                 consumption.setTotalPrice(itemDTO.getTotalPrice());
-                return consumption;
-            })
-            .collect(Collectors.toList());
+                items.add(consumption);
+            }
 
-        sale.setItems(items);
-        Sale savedSale = saleRepository.save(sale);
-        return convertToDTO(savedSale);
+            sale.setItems(items);
+            Sale savedSale = saleRepository.save(sale);
+            return convertToDTO(savedSale);
+
+        } catch (OptimisticLockException e) {
+            throw new RuntimeException("Concurrent stock update detected. Please try again.", e);
+        }
     }
 
     @Override
@@ -107,24 +117,20 @@ public class SaleServiceImpl implements SaleService {
     }
 
     @Override
+    public Double calculateTotalRevenue(LocalDateTime startDate, LocalDateTime endDate) {
+        return saleRepository.calculateTotalSalesForPeriod(startDate, endDate);
+    }
+
+    @Override
     @Transactional
     public void deleteSale(Long id) {
         Sale sale = saleRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Sale not found"));
             
-        // Restore product quantities
-        sale.getItems().forEach(item -> {
-            Product product = item.getProduct();
-            product.setQuantityInStock(product.getQuantityInStock() + item.getQuantity());
-            productRepository.save(product);
-        });
+        // Reverse inventory changes
+        inventoryService.reverseStockForSale(sale.getId());
 
         saleRepository.delete(sale);
-    }
-
-    @Override
-    public Double calculateTotalRevenue(LocalDateTime startDate, LocalDateTime endDate) {
-        return saleRepository.calculateTotalSalesForPeriod(startDate, endDate);
     }
 
     @Override
@@ -133,15 +139,14 @@ public class SaleServiceImpl implements SaleService {
         Sale sale = saleRepository.findById(saleId)
             .orElseThrow(() -> new EntityNotFoundException("Sale not found"));
             
-        sale.getItems().forEach(item -> {
-            Product product = item.getProduct();
-            int newStock = product.getQuantityInStock() - item.getQuantity();
-            if (newStock < 0) {
-                throw new IllegalStateException("Insufficient stock for product: " + product.getName());
-            }
-            product.setQuantityInStock(newStock);
-            productRepository.save(product);
-        });
+        for (ProductConsumption item : sale.getItems()) {
+            inventoryService.processStockForSale(
+                item.getProduct().getId(),
+                item.getQuantity(),
+                saleId,
+                1L  // TODO: Get actual employee ID from security context
+            );
+        }
     }
 
     private SaleDTO convertToDTO(Sale sale) {

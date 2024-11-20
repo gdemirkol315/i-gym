@@ -23,8 +23,8 @@ public class Product {
     @Column(nullable = false)
     private Double price;
 
-    @Column(name = "quantity_in_stock", nullable = false)
-    private Integer quantityInStock;
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
+    private Inventory inventory;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ProductConsumption> productConsumptions = new ArrayList<>();
