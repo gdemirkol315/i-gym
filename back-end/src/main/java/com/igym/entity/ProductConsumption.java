@@ -24,6 +24,10 @@ public class ProductConsumption {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sale_id", nullable = false)
+    private Sale sale;
+
     @Column(nullable = false)
     private Integer quantity;
 

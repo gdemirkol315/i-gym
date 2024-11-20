@@ -21,12 +21,14 @@ import { AuthService } from '../../core/services/auth.service';
 })
 export class SidenavComponent implements OnInit {
   isManager: boolean = false;
+  isSupervisor: boolean = false;
 
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
     this.authService.userRole$.subscribe(role => {
       this.isManager = role === 'MANAGER';
+      this.isSupervisor = role === 'SUPERVISOR';
     });
   }
 }
