@@ -1,8 +1,9 @@
-package com.igym.service;
+package com.igym.service.impl;
 
 import com.igym.dto.CustomerDTO;
 import com.igym.entity.Customer;
 import com.igym.repository.CustomerRepository;
+import com.igym.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,10 +1,11 @@
-package com.igym.service;
+package com.igym.service.impl;
 
 import com.igym.entity.*;
 import com.igym.repository.EmployeeRepository;
 import com.igym.repository.InventoryRepository;
 import com.igym.repository.InventoryTransactionRepository;
 import com.igym.repository.ProductRepository;
+import com.igym.service.InventoryService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
