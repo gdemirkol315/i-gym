@@ -9,21 +9,23 @@
     <span matListItemTitle>Customers</span>
   </a>
 
-  <a mat-list-item routerLink="/products" routerLinkActive="active">
-    <mat-icon matListItemIcon>inventory_2</mat-icon>
-    <span matListItemTitle>Products</span>
+  <a mat-list-item routerLink="/entries" routerLinkActive="active">
+    <mat-icon matListItemIcon>fitness_center</mat-icon>
+    <span matListItemTitle>Gym Entry</span>
   </a>
 
-  <a mat-list-item routerLink="/products/inventory" routerLinkActive="active">
-    <mat-icon matListItemIcon>inventory</mat-icon>
-    <span matListItemTitle>Inventory</span>
+  <a mat-list-item routerLink="/cashier" routerLinkActive="active">
+    <mat-icon matListItemIcon>point_of_sale</mat-icon>
+    <span matListItemTitle>Cashier</span>
   </a>
 
   <ng-container *ngIf="isManager || isSupervisor">
     <mat-divider></mat-divider>
-    <a mat-list-item routerLink="/entries" routerLinkActive="active">
-      <mat-icon matListItemIcon>fitness_center</mat-icon>
-      <span matListItemTitle>Gym Entry Management</span>
+
+
+    <a mat-list-item routerLink="/products" routerLinkActive="active">
+      <mat-icon matListItemIcon>inventory_2</mat-icon>
+      <span matListItemTitle>Product Management</span>
     </a>
 
     <a mat-list-item routerLink="/reports" routerLinkActive="active">
@@ -33,7 +35,6 @@
   </ng-container>
 
   <ng-container *ngIf="isManager">
-
     <a mat-list-item routerLink="/settings" routerLinkActive="active">
       <mat-icon matListItemIcon>settings</mat-icon>
       <span matListItemTitle>Settings</span>

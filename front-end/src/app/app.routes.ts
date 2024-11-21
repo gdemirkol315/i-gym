@@ -43,6 +43,11 @@ export const routes: Routes = [
           .then(m => m.EmployeesModule)
       },
       {
+        path: 'cashier',
+        loadChildren: () => import('./features/cashier/cashier.module')
+          .then(m => m.CashierModule)
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'
