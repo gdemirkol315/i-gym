@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProductService, Product, EntryProduct } from '../product.service';
 import { AddProductDialogComponent } from '../add-product-dialog/add-product-dialog.component';
 import { AddEntryProductDialogComponent } from '../add-entry-product-dialog/add-entry-product-dialog.component';
+import { AddStockDialogComponent } from '../add-stock-dialog/add-stock-dialog.component';
 
 @Component({
   selector: 'app-product-list',
@@ -12,47 +13,33 @@ import { AddEntryProductDialogComponent } from '../add-entry-product-dialog/add-
 export class ProductListComponent implements OnInit {
   products: Product[] = [];
   entryProducts: EntryProduct[] = [];
-
   productColumns: string[] = ['id', 'name', 'barcode', 'category', 'price', 'quantity'];
   entryProductColumns: string[] = ['id', 'name', 'duration', 'maxEntries', 'price', 'entryType'];
 
   constructor(
     private productService: ProductService,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadProducts();
     this.loadEntryProducts();
   }
 
-  loadProducts(): void {
-    this.productService.getProducts().subscribe({
-      next: (data) => {
-        this.products = data;
-      },
-      error: () => {
-        this.productService.toastr.error('Error loading products');
-      }
+  loadProducts() {
+    this.productService.getProducts().subscribe(products => {
+      this.products = products;
     });
   }
 
-  loadEntryProducts(): void {
-    this.productService.getEntryProducts().subscribe({
-      next: (data) => {
-        this.entryProducts = data;
-      },
-      error: () => {
-        this.productService.toastr.error('Error loading entry products');
-      }
+  loadEntryProducts() {
+    this.productService.getEntryProducts().subscribe(products => {
+      this.entryProducts = products;
     });
   }
 
-  openAddProductDialog(): void {
-    const dialogRef = this.dialog.open(AddProductDialogComponent, {
-      width: '400px'
-    });
-
+  openAddProductDialog() {
+    const dialogRef = this.dialog.open(AddProductDialogComponent);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.loadProducts();
@@ -60,14 +47,20 @@ export class ProductListComponent implements OnInit {
     });
   }
 
-  openAddEntryProductDialog(): void {
-    const dialogRef = this.dialog.open(AddEntryProductDialogComponent, {
-      width: '400px'
-    });
-
+  openAddEntryProductDialog() {
+    const dialogRef = this.dialog.open(AddEntryProductDialogComponent);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.loadEntryProducts();
+      }
+    });
+  }
+
+  openAddStockDialog() {
+    const dialogRef = this.dialog.open(AddStockDialogComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadProducts();
       }
     });
   }

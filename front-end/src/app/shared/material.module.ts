@@ -18,6 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 const materialModules = [
   MatButtonModule,
@@ -39,6 +40,7 @@ const materialModules = [
   MatTableModule,
   MatToolbarModule,
   MatTooltipModule,
+  MatAutocompleteModule,
 ];
 
 @NgModule({

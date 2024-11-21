@@ -3,10 +3,16 @@
   <div class="section">
     <div class="header">
       <h2>Products</h2>
-      <button mat-raised-button color="primary" (click)="openAddProductDialog()">
-        <mat-icon>add</mat-icon>
-        Add New Product
-      </button>
+      <div class="button-group">
+        <button mat-raised-button color="primary" (click)="openAddStockDialog()">
+          <mat-icon>add_shopping_cart</mat-icon>
+          Add Stock
+        </button>
+        <button mat-raised-button color="primary" (click)="openAddProductDialog()">
+          <mat-icon>add</mat-icon>
+          Add New Product
+        </button>
+      </div>
     </div>
 
     <mat-table [dataSource]="products" class="mat-elevation-z4">

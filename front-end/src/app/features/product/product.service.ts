@@ -39,11 +39,19 @@ export interface CreateEntryProductRequest {
   entryType: 'ONE_TIME' | 'MULTI_PASS' | 'SUBSCRIPTION';
 }
 
+export interface AddStockRequest {
+  productId: number;
+  quantity: number;
+  notes: string;
+  employeeId: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService extends DataService {
   private readonly API_EXTENSION = 'product';
+  private readonly INVENTORY_API = 'inventory';
 
   constructor(
     http: HttpClient,
@@ -67,5 +75,9 @@ export class ProductService extends DataService {
 
   createEntryProduct(entryProduct: CreateEntryProductRequest): Observable<EntryProduct> {
     return this.http.post<EntryProduct>(this.hostname + this.API_EXTENSION + "/entry/create", entryProduct);
+  }
+
+  addStock(request: AddStockRequest): Observable<void> {
+    return this.http.post<void>(this.hostname + this.INVENTORY_API + "/add-stock", request);
   }
 }

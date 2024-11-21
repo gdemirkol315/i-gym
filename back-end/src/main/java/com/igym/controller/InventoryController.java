@@ -1,6 +1,6 @@
 package com.igym.controller;
 
-import com.igym.entity.Inventory;
+import com.igym.dto.AddStockRequest;
 import com.igym.entity.InventoryTransaction;
 import com.igym.service.InventoryService;
 import lombok.RequiredArgsConstructor;
@@ -18,45 +18,15 @@ public class InventoryController {
 
     private final InventoryService inventoryService;
 
-    @GetMapping
-    public ResponseEntity<List<Inventory>> getAllInventory() {
-        return ResponseEntity.ok(inventoryService.getAllInventory());
-    }
-
-    @GetMapping("/{productId}")
-    public ResponseEntity<Inventory> getInventoryByProduct(@PathVariable Long productId) {
-        return ResponseEntity.ok(inventoryService.getInventoryByProductId(productId));
-    }
-
-    @GetMapping("/low-stock")
-    public ResponseEntity<List<Inventory>> getLowStockItems(@RequestParam Integer threshold) {
-        return ResponseEntity.ok(inventoryService.getLowStockItems(threshold));
-    }
-
-    @GetMapping("/out-of-stock")
-    public ResponseEntity<List<Inventory>> getOutOfStockItems() {
-        return ResponseEntity.ok(inventoryService.getOutOfStockItems());
-    }
-
-    @PostMapping("/{productId}/add")
-    public ResponseEntity<Void> addStock(
-            @PathVariable Long productId,
-            @RequestParam Integer quantity,
-            @RequestParam String reference,
-            @RequestParam(required = false) String notes,
-            @RequestParam Long employeeId) {
-        inventoryService.addStock(productId, quantity, reference, notes, employeeId);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/{productId}/remove")
-    public ResponseEntity<Void> removeStock(
-            @PathVariable Long productId,
-            @RequestParam Integer quantity,
-            @RequestParam String reference,
-            @RequestParam(required = false) String notes,
-            @RequestParam Long employeeId) {
-        inventoryService.removeStock(productId, quantity, reference, notes, employeeId);
+    @PostMapping("/add-stock")
+    public ResponseEntity<Void> addStock(@RequestBody AddStockRequest request) {
+        inventoryService.addStock(
+            request.getProductId(),
+            request.getQuantity(),
+            "MANUAL_ADD",
+            request.getNotes(),
+            request.getEmployeeId()
+        );
         return ResponseEntity.ok().build();
     }
 

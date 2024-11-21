@@ -1,0 +1,65 @@
+<h2 mat-dialog-title>Add Stock</h2>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-dialog-content>
+    <div class="form-field">
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Search Product</mat-label>
+        <input type="text"
+               matInput
+               formControlName="product"
+               [matAutocomplete]="auto"
+               placeholder="Search by name or barcode">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+          <mat-option *ngFor="let product of filteredProducts | async" [value]="product">
+            {{product.name}} ({{product.barcode || 'No barcode'}})
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="form.get('product')?.hasError('required')">
+          Product is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-field">
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Quantity</mat-label>
+        <input type="number"
+               matInput
+               formControlName="quantity"
+               min="1">
+        <mat-error *ngIf="form.get('quantity')?.hasError('required')">
+          Quantity is required
+        </mat-error>
+        <mat-error *ngIf="form.get('quantity')?.hasError('min')">
+          Quantity must be at least 1
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-field">
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Notes</mat-label>
+        <textarea matInput
+                  formControlName="notes"
+                  placeholder="Enter notes about this stock addition"
+                  rows="3"></textarea>
+        <mat-error *ngIf="form.get('notes')?.hasError('required')">
+          Notes are required
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Hidden employee ID field -->
+    <input type="hidden" formControlName="employeeId">
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="onCancel()">Cancel</button>
+    <button mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="!form.valid">
+      Add Stock
+    </button>
+  </mat-dialog-actions>
+</form>
