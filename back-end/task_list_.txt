@@ -1,0 +1,15 @@
+add customer to entry products (make barcode search or customer name add)
+implement discount
+customer balance purchase
+implement payment methods (credit card, customer balance, cash) and invoice creation
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+customer photo add
+customer profile add
+customer balance
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+implement gym entry
+
