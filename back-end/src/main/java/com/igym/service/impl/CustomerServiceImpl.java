@@ -34,6 +34,7 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setEmail(customerDTO.getEmail());
         customer.setPhotoUrl(customerDTO.getPhotoUrl());
         customer.setBirthDate(customerDTO.getBirthDate());
+        customer.setBarcode(customerDTO.getBarcode());
         customer.setBalance(0.0); // Initialize with zero balance
         
         Customer savedCustomer = customerRepository.save(customer);

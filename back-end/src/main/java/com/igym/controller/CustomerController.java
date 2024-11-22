@@ -21,7 +21,7 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @GetMapping("/list")
-    @PreAuthorize("hasRole('EMPLOYEE') or hasRole('MANAGER')")
+    @PreAuthorize("hasRole('EMPLOYEE') or hasRole('MANAGER') or hasRole('SUPERVISOR')")
     public ResponseEntity<List<CustomerDTO>> getAllCustomers() {
         try {
             List<CustomerDTO> customers = customerService.getAllCustomers();
@@ -32,12 +32,13 @@ public class CustomerController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('EMPLOYEE') or hasRole('MANAGER')")
+    @PreAuthorize("hasRole('EMPLOYEE') or hasRole('MANAGER') or hasRole('SUPERVISOR')")
     public ResponseEntity<?> createCustomer(@Valid @RequestBody CreateCustomerRequest request) {
         try {
             CustomerDTO customerDTO = new CustomerDTO();
             customerDTO.setName(request.getName());
             customerDTO.setLastName(request.getLastName());
+            customerDTO.setBarcode(request.getBarcode());
             customerDTO.setEmail(request.getEmail());
             customerDTO.setPhotoUrl(request.getPhotoUrl());
             customerDTO.setBirthDate(request.getBirthDate());
@@ -64,5 +65,6 @@ public class CustomerController {
         private String photoUrl;
 
         private LocalDateTime birthDate;
+        private String barcode;
     }
 }

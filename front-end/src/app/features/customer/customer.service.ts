@@ -11,6 +11,7 @@ export interface Customer {
   lastName: string;
   email: string;
   birthDate: string;
+  barcode: string;
 }
 
 export interface CreateCustomerRequest {
@@ -18,6 +19,7 @@ export interface CreateCustomerRequest {
   lastName: string;
   email: string;
   birthDate: string;
+  barcode: string;
 }
 
 @Injectable({

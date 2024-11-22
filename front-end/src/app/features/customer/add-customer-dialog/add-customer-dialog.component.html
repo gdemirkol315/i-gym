@@ -38,6 +38,14 @@
         Birth date is required
       </mat-error>
     </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Barcode</mat-label>
+      <input matInput formControlName="barcode" placeholder="Scan Barcode">
+      <mat-error *ngIf="customerForm.get('barcode')?.hasError('required')">
+        Barcode is required
+      </mat-error>
+    </mat-form-field>
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">

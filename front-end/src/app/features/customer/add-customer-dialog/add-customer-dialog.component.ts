@@ -22,7 +22,8 @@ export class AddCustomerDialogComponent {
       name: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      birthDate: ['', Validators.required]
+      birthDate: ['', Validators.required],
+      barcode: ['', Validators.required]
     });
   }
 

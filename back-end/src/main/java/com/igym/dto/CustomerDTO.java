@@ -13,7 +13,7 @@ public class CustomerDTO {
     private String email;
     private String photoUrl;
     private LocalDateTime birthDate;
-    private String qrCode;
+    private String barcode;
     private Double balance;
     private LocalDateTime createdAt;
 
@@ -25,7 +25,7 @@ public class CustomerDTO {
         dto.setEmail(customer.getEmail());
         dto.setPhotoUrl(customer.getPhotoUrl());
         dto.setBirthDate(customer.getBirthDate());
-        dto.setQrCode(customer.getBarcode());
+        dto.setBarcode(customer.getBarcode());
         dto.setBalance(customer.getBalance());
         dto.setCreatedAt(customer.getCreatedAt());
         return dto;
