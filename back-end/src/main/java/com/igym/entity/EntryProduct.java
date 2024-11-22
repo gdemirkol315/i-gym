@@ -30,7 +30,7 @@ public class EntryProduct {
     private EntryType entryType;
 
     @OneToMany(mappedBy = "entryProduct", cascade = CascadeType.ALL)
-    private List<EntryConsumption> entryConsumptions = new ArrayList<>();
+    private List<EntryProductTransaction> entryProductTransactions = new ArrayList<>();
 
     public enum EntryType {
         ONE_TIME,

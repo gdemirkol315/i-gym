@@ -37,7 +37,7 @@ public class Customer {
     private List<ConsentForm> consentForms = new ArrayList<>();
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private List<EntryConsumption> entryConsumptions = new ArrayList<>();
+    private List<EntryProductTransaction> entryProductTransactions = new ArrayList<>();
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<ProductConsumption> productConsumptions = new ArrayList<>();

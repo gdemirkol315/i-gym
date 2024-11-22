@@ -7,33 +7,24 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
+
 @Entity
 @Table(name = "entry_consumption")
 @Data
 @EntityListeners(AuditingEntityListener.class)
 public class EntryConsumption {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "entry_product_id", nullable = false)
-    private EntryProduct entryProduct;
+    @JoinColumn(name = "entry_product_transaction", nullable = false)
+    private EntryProductTransaction entryProductTransaction;
 
     @CreatedDate
     @Column(name = "date", nullable = false, updatable = false)
-    private LocalDateTime date;
+    private LocalDateTime consumptionDate;
 
-    @Column(name = "expiry_date")
-    private LocalDateTime expiryDate;
-
-    @Column(name = "remaining_entries")
-    private Integer remainingEntries;
-
-    @Column(name = "is_active")
-    private boolean isActive = true;
 }
