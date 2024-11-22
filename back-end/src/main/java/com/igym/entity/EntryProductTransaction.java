@@ -39,6 +39,6 @@ public class EntryProductTransaction {
     @Column(name = "is_active")
     private boolean isActive = true;
 
-    @OneToMany(mappedBy = "entry_product_transaction", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "entryProductTransaction", cascade = CascadeType.ALL)
     private List<EntryConsumption> entryConsumptions = new ArrayList<>();
 }
