@@ -25,7 +25,7 @@ public class CustomerDTO {
         dto.setEmail(customer.getEmail());
         dto.setPhotoUrl(customer.getPhotoUrl());
         dto.setBirthDate(customer.getBirthDate());
-        dto.setQrCode(customer.getQrCode());
+        dto.setQrCode(customer.getBarcode());
         dto.setBalance(customer.getBalance());
         dto.setCreatedAt(customer.getCreatedAt());
         return dto;

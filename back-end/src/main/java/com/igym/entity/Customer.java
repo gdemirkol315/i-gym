@@ -45,8 +45,8 @@ public class Customer {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<AccountTransaction> accountTransactions = new ArrayList<>();
 
-    @Column(name = "qr_code")
-    private String qrCode;
+    @Column(name = "barcode")
+    private String barcode;
 
     @Column(name = "balance")
     private Double balance = 0.0;
