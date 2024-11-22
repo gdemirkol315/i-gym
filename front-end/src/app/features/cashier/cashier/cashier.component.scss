@@ -24,6 +24,15 @@
     gap: 20px;
     overflow-y: auto;
 
+    .search-field {
+      width: 100%;
+      margin-bottom: 8px;
+      
+      ::ng-deep .mat-form-field-wrapper {
+        padding-bottom: 0;
+      }
+    }
+
     .products-accordion,
     .entry-products-accordion {
       width: 100%;

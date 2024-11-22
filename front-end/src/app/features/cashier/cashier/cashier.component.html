@@ -1,5 +1,15 @@
 <div class="cashier-container">
   <div class="products-section">
+    <!-- Search Bar -->
+    <mat-form-field class="search-field" appearance="outline">
+      <mat-label>Search Products</mat-label>
+      <input matInput
+             [(ngModel)]="searchTerm"
+             (ngModelChange)="onSearch($event)"
+             placeholder="Search by name or barcode">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
     <!-- Error Message -->
     <mat-error *ngIf="error" class="error-message">
       {{error}}
@@ -12,21 +22,21 @@
 
     <!-- Products Accordion -->
     <mat-accordion class="products-accordion" *ngIf="!loading && !error">
-      <mat-expansion-panel>
+      <mat-expansion-panel [expanded]="searchTerm && filteredProductCategories.size > 0">
         <mat-expansion-panel-header>
           <mat-panel-title>Products</mat-panel-title>
         </mat-expansion-panel-header>
 
         <!-- Sub-categories -->
         <mat-accordion multi="true">
-          <mat-expansion-panel *ngFor="let category of productCategories.keys()">
+          <mat-expansion-panel *ngFor="let category of filteredProductCategories.keys()" [expanded]="!!searchTerm">
             <mat-expansion-panel-header>
               <mat-panel-title>{{category}}</mat-panel-title>
             </mat-expansion-panel-header>
 
             <!-- Products List -->
             <div class="products-grid">
-              <mat-card *ngFor="let product of productCategories.get(category)?.values()" class="product-card">
+              <mat-card *ngFor="let product of filteredProductCategories.get(category)?.values()" class="product-card">
                 <mat-card-header>
                   <mat-card-title>{{product.name}}</mat-card-title>
                   <mat-card-subtitle>{{product.price | currency}}</mat-card-subtitle>
@@ -45,21 +55,21 @@
 
     <!-- Entry Products Accordion -->
     <mat-accordion class="entry-products-accordion" *ngIf="!loading && !error">
-      <mat-expansion-panel>
+      <mat-expansion-panel [expanded]="searchTerm && filteredEntryProductCategories.size > 0">
         <mat-expansion-panel-header>
           <mat-panel-title>Entry Products</mat-panel-title>
         </mat-expansion-panel-header>
 
         <!-- Sub-categories -->
         <mat-accordion multi="true">
-          <mat-expansion-panel *ngFor="let category of entryProductCategories.keys()">
+          <mat-expansion-panel *ngFor="let category of filteredEntryProductCategories.keys()" [expanded]="!!searchTerm">
             <mat-expansion-panel-header>
               <mat-panel-title>{{category}}</mat-panel-title>
             </mat-expansion-panel-header>
 
             <!-- Entry Products List -->
             <div class="products-grid">
-              <mat-card *ngFor="let product of entryProductCategories.get(category)" class="product-card">
+              <mat-card *ngFor="let product of filteredEntryProductCategories.get(category)" class="product-card">
                 <mat-card-header>
                   <mat-card-title>{{product.name}}</mat-card-title>
                   <mat-card-subtitle>{{product.price | currency}}</mat-card-subtitle>

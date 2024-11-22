@@ -1,6 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy, HostListener} from '@angular/core';
 import {CashierService} from '../cashier.service';
 import {EntryProduct, Product, ProductService} from '../../product/product.service';
+import {Subject} from 'rxjs';
+import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 
 interface BasketItem {
   id: number;
@@ -15,21 +17,130 @@ interface BasketItem {
   templateUrl: './cashier.component.html',
   styleUrls: ['./cashier.component.scss']
 })
-export class CashierComponent implements OnInit {
+export class CashierComponent implements OnInit, OnDestroy {
   productCategories: Map<String, Array<Product>> = new Map();
   entryProductCategories: Map<String, Array<EntryProduct>> = new Map();
+  filteredProductCategories: Map<String, Array<Product>> = new Map();
+  filteredEntryProductCategories: Map<String, Array<EntryProduct>> = new Map();
   basket: BasketItem[] = [];
   totalSum = 0;
   loading = true;
   error: string | null = null;
+  searchTerm = '';
+  private searchSubject = new Subject<string>();
+  private barcodeBuffer = '';
+  private barcodeTimeout: any;
 
   constructor(private cashierService: CashierService,
               private productService: ProductService) {
+    // Set up search debounce
+    this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(term => {
+      this.filterProducts(term);
+    });
   }
 
   ngOnInit(): void {
     this.loadProducts();
     this.loadEntryProducts();
+  }
+
+  ngOnDestroy(): void {
+    this.searchSubject.complete();
+    if (this.barcodeTimeout) {
+      clearTimeout(this.barcodeTimeout);
+    }
+  }
+
+  @HostListener('document:keypress', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    // Ignore if target is an input field
+    if (event.target instanceof HTMLInputElement) {
+      return;
+    }
+
+    // If Enter key is pressed, process the current buffer immediately
+    if (event.key === 'Enter') {
+      if (this.barcodeBuffer.length >= 5) {
+        this.processBarcode(this.barcodeBuffer);
+      }
+      this.barcodeBuffer = '';
+      return;
+    }
+
+    // Reset timeout for barcode scanner
+    if (this.barcodeTimeout) {
+      clearTimeout(this.barcodeTimeout);
+    }
+
+    // Append character to buffer
+    this.barcodeBuffer += event.key;
+
+    // Set timeout to process buffer
+    this.barcodeTimeout = setTimeout(() => {
+      if (this.barcodeBuffer.length >= 5) {
+        this.processBarcode(this.barcodeBuffer);
+      }
+      this.barcodeBuffer = '';
+    }, 50);
+  }
+
+  private processBarcode(barcode: string) {
+
+
+    // Find product with matching barcode
+    for (const products of this.productCategories.values()) {
+      const product = products.find(p => p.barcode === barcode);
+      if (product) {
+        console.log('Found product:', product); // Debug log
+        this.addToBasket(product);
+        break;
+      }
+    }
+  }
+
+  onSearch(term: string): void {
+    this.searchTerm = term;
+    this.searchSubject.next(term);
+  }
+
+  private filterProducts(term: string): void {
+    this.filteredProductCategories.clear();
+    this.filteredEntryProductCategories.clear();
+
+    if (!term.trim()) {
+      // If no search term, show all products
+      this.filteredProductCategories = new Map(this.productCategories);
+      this.filteredEntryProductCategories = new Map(this.entryProductCategories);
+      return;
+    }
+
+    const lowerTerm = term.toLowerCase();
+
+    // Filter regular products
+    this.productCategories.forEach((products, category) => {
+      const filteredProducts = products.filter(product =>
+        product.name.toLowerCase().includes(lowerTerm) ||
+        product.barcode?.toLowerCase().includes(lowerTerm)
+      );
+
+      if (filteredProducts.length > 0) {
+        this.filteredProductCategories.set(category, filteredProducts);
+      }
+    });
+
+    // Filter entry products
+    this.entryProductCategories.forEach((products, category) => {
+      const filteredProducts = products.filter(product =>
+        product.name.toLowerCase().includes(lowerTerm)
+      );
+
+      if (filteredProducts.length > 0) {
+        this.filteredEntryProductCategories.set(category, filteredProducts);
+      }
+    });
   }
 
   private loadProducts(): void {
@@ -41,8 +152,8 @@ export class CashierComponent implements OnInit {
           } else {
             this.productCategories.set(item.category.toUpperCase(), new Array<Product>(item))
           }
-
-        })
+        });
+        this.filteredProductCategories = new Map(this.productCategories);
         this.loading = false;
       },
       error: (error) => {
@@ -62,8 +173,8 @@ export class CashierComponent implements OnInit {
           } else {
             this.entryProductCategories.set(item.entryType.toUpperCase(), new Array<EntryProduct>(item))
           }
-
-        })
+        });
+        this.filteredEntryProductCategories = new Map(this.entryProductCategories);
         this.loading = false;
       },
       error: (error) => {
@@ -93,7 +204,6 @@ export class CashierComponent implements OnInit {
         total: item.price
       });
     }
-
 
     this.updateTotalSum();
   }
