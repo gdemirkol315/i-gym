@@ -1,8 +1,10 @@
-import {Component, OnInit, OnDestroy, HostListener} from '@angular/core';
-import {CashierService} from '../cashier.service';
-import {EntryProduct, Product, ProductService} from '../../product/product.service';
-import {Subject} from 'rxjs';
-import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { CashierService } from '../cashier.service';
+import { EntryProduct, Product, ProductService } from '../../product/product.service';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { CustomerBarcodeDialogComponent } from '../customer-barcode-dialog/customer-barcode-dialog.component';
 
 interface BasketItem {
   id: number;
@@ -10,6 +12,8 @@ interface BasketItem {
   quantity: number;
   price: number;
   total: number;
+  isEntryProduct?: boolean;
+  customerBarcode?: string;
 }
 
 @Component({
@@ -31,9 +35,11 @@ export class CashierComponent implements OnInit, OnDestroy {
   private barcodeBuffer = '';
   private barcodeTimeout: any;
 
-  constructor(private cashierService: CashierService,
-              private productService: ProductService) {
-    // Set up search debounce
+  constructor(
+    private cashierService: CashierService,
+    private productService: ProductService,
+    private dialog: MatDialog
+  ) {
     this.searchSubject.pipe(
       debounceTime(300),
       distinctUntilChanged()
@@ -56,12 +62,10 @@ export class CashierComponent implements OnInit, OnDestroy {
 
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
-    // Ignore if target is an input field
     if (event.target instanceof HTMLInputElement) {
       return;
     }
 
-    // If Enter key is pressed, process the current buffer immediately
     if (event.key === 'Enter') {
       if (this.barcodeBuffer.length >= 5) {
         this.processBarcode(this.barcodeBuffer);
@@ -70,15 +74,12 @@ export class CashierComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Reset timeout for barcode scanner
     if (this.barcodeTimeout) {
       clearTimeout(this.barcodeTimeout);
     }
 
-    // Append character to buffer
     this.barcodeBuffer += event.key;
 
-    // Set timeout to process buffer
     this.barcodeTimeout = setTimeout(() => {
       if (this.barcodeBuffer.length >= 5) {
         this.processBarcode(this.barcodeBuffer);
@@ -88,13 +89,10 @@ export class CashierComponent implements OnInit, OnDestroy {
   }
 
   private processBarcode(barcode: string) {
-
-
-    // Find product with matching barcode
     for (const products of this.productCategories.values()) {
       const product = products.find(p => p.barcode === barcode);
       if (product) {
-        console.log('Found product:', product); // Debug log
+        console.log('Found product:', product);
         this.addToBasket(product);
         break;
       }
@@ -111,7 +109,6 @@ export class CashierComponent implements OnInit, OnDestroy {
     this.filteredEntryProductCategories.clear();
 
     if (!term.trim()) {
-      // If no search term, show all products
       this.filteredProductCategories = new Map(this.productCategories);
       this.filteredEntryProductCategories = new Map(this.entryProductCategories);
       return;
@@ -119,7 +116,6 @@ export class CashierComponent implements OnInit, OnDestroy {
 
     const lowerTerm = term.toLowerCase();
 
-    // Filter regular products
     this.productCategories.forEach((products, category) => {
       const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(lowerTerm) ||
@@ -131,7 +127,6 @@ export class CashierComponent implements OnInit, OnDestroy {
       }
     });
 
-    // Filter entry products
     this.entryProductCategories.forEach((products, category) => {
       const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(lowerTerm)
@@ -185,24 +180,55 @@ export class CashierComponent implements OnInit, OnDestroy {
     });
   }
 
-  addToBasket(item: any, isEntryProduct: boolean = false): void {
-    var existingItem;
-    if (!isEntryProduct) {
-      existingItem = this.basket.find(i => i.id === item.id);
-    } else {
-      existingItem = this.basket.find(i => i.name === item.name);
-    }
-    if (existingItem) {
-      existingItem.quantity++;
-      existingItem.total = existingItem.quantity * existingItem.price;
-    } else {
-      this.basket.push({
-        id: item.id,
-        name: item.name,
-        quantity: 1,
-        price: item.price,
-        total: item.price
+  async addToBasket(item: any, isEntryProduct: boolean = false): Promise<void> {
+    if (isEntryProduct) {
+      const dialogRef = this.dialog.open(CustomerBarcodeDialogComponent, {
+        width: '400px',
+        disableClose: true
       });
+
+      const customerBarcode = await dialogRef.afterClosed().toPromise();
+      if (!customerBarcode) {
+        return; // User cancelled or didn't provide barcode
+      }
+
+      // Add entry product with customer barcode
+      const existingItem = this.basket.find(i => 
+        i.name === item.name && 
+        i.isEntryProduct && 
+        i.customerBarcode === customerBarcode
+      );
+
+      if (existingItem) {
+        existingItem.quantity++;
+        existingItem.total = existingItem.quantity * existingItem.price;
+      } else {
+        this.basket.push({
+          id: item.id,
+          name: item.name,
+          quantity: 1,
+          price: item.price,
+          total: item.price,
+          isEntryProduct: true,
+          customerBarcode: customerBarcode
+        });
+      }
+    } else {
+      // Regular product handling
+      const existingItem = this.basket.find(i => i.id === item.id && !i.isEntryProduct);
+      if (existingItem) {
+        existingItem.quantity++;
+        existingItem.total = existingItem.quantity * existingItem.price;
+      } else {
+        this.basket.push({
+          id: item.id,
+          name: item.name,
+          quantity: 1,
+          price: item.price,
+          total: item.price,
+          isEntryProduct: false
+        });
+      }
     }
 
     this.updateTotalSum();

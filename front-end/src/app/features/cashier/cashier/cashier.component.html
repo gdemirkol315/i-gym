@@ -101,7 +101,13 @@
         <mat-list *ngIf="basket.length > 0">
           <mat-list-item *ngFor="let item of basket" class="basket-item">
             <div class="basket-item-content">
-              <span class="item-name">{{item.name}}</span>
+              <div class="item-details">
+                <span class="item-name">{{item.name}}</span>
+                <span *ngIf="item.isEntryProduct" class="customer-info">
+                  <mat-icon>person</mat-icon>
+                  Customer: {{item.customerBarcode}}
+                </span>
+              </div>
               <div class="quantity-controls">
                 <button mat-icon-button (click)="updateQuantity(item.id, false)">
                   <mat-icon>remove</mat-icon>
