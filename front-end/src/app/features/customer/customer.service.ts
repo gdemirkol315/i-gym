@@ -43,4 +43,14 @@ export class CustomerService extends DataService {
   createCustomer(customer: CreateCustomerRequest): Observable<Customer> {
     return this.http.post<Customer>(this.hostname + this.API_EXTENSION + "/create", customer);
   }
+
+  checkBarcodeExists(barcode: string): Observable<boolean> {
+    return this.http.get<boolean>(this.hostname + this.API_EXTENSION + "/check-barcode/" + barcode);
+  }
+
+  searchByName(term: string): Observable<Customer[]> {
+    return this.http.get<Customer[]>(this.hostname + this.API_EXTENSION + "/search", {
+      params: { term }
+    });
+  }
 }

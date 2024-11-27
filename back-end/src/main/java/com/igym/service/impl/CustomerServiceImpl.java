@@ -47,4 +47,17 @@ public class CustomerServiceImpl implements CustomerService {
                 .map(CustomerDTO::fromEntity)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public boolean existsByBarcode(String barcode) {
+        return customerRepository.existsByBarcode(barcode);
+    }
+
+    @Override
+    public List<CustomerDTO> searchByName(String searchTerm) {
+        return customerRepository.findByNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(searchTerm, searchTerm)
+                .stream()
+                .map(CustomerDTO::fromEntity)
+                .collect(Collectors.toList());
+    }
 }

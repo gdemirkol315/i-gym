@@ -1,0 +1,41 @@
+<h2 mat-dialog-title>Find Customer</h2>
+<mat-dialog-content>
+  <mat-radio-group [(ngModel)]="searchType" class="search-type-group">
+    <mat-radio-button value="barcode">Search by Barcode</mat-radio-button>
+    <mat-radio-button value="name">Search by Name</mat-radio-button>
+  </mat-radio-group>
+
+  <ng-container *ngIf="searchType === 'barcode'">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Customer Barcode</mat-label>
+      <input matInput [(ngModel)]="barcode" placeholder="Scan or enter customer barcode" 
+             (keyup.enter)="onBarcodeSubmit()" #barcodeInput>
+      <mat-error *ngIf="error">{{ error }}</mat-error>
+    </mat-form-field>
+  </ng-container>
+
+  <ng-container *ngIf="searchType === 'name'">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Search by Name</mat-label>
+      <input matInput [formControl]="searchControl" placeholder="Enter customer name"
+             [matAutocomplete]="auto">
+      <mat-error *ngIf="error">{{ error }}</mat-error>
+    </mat-form-field>
+
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onCustomerSelected($event)">
+      <mat-option *ngFor="let customer of filteredCustomers" [value]="customer">
+        {{ customer.name }} {{ customer.lastName }}
+      </mat-option>
+    </mat-autocomplete>
+  </ng-container>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="loading">Cancel</button>
+  <button mat-raised-button color="primary" 
+          (click)="searchType === 'barcode' ? onBarcodeSubmit() : onNameSubmit()" 
+          [disabled]="loading">
+    <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+    <span *ngIf="!loading">Submit</span>
+  </button>
+</mat-dialog-actions>

@@ -8,4 +8,6 @@ import java.util.List;
 public interface CustomerService {
     CustomerDTO createCustomer(CustomerDTO customerDTO);
     List<CustomerDTO> getAllCustomers();
+    boolean existsByBarcode(String barcode);
+    List<CustomerDTO> searchByName(String searchTerm);
 }

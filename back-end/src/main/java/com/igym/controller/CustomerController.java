@@ -31,6 +31,28 @@ public class CustomerController {
         }
     }
 
+    @GetMapping("/check-barcode/{barcode}")
+    @PreAuthorize("hasRole('EMPLOYEE') or hasRole('MANAGER') or hasRole('SUPERVISOR')")
+    public ResponseEntity<Boolean> checkBarcodeExists(@PathVariable String barcode) {
+        try {
+            boolean exists = customerService.existsByBarcode(barcode);
+            return ResponseEntity.ok(exists);
+        } catch (RuntimeException e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("/search")
+    @PreAuthorize("hasRole('EMPLOYEE') or hasRole('MANAGER') or hasRole('SUPERVISOR')")
+    public ResponseEntity<List<CustomerDTO>> searchCustomers(@RequestParam String term) {
+        try {
+            List<CustomerDTO> customers = customerService.searchByName(term);
+            return ResponseEntity.ok(customers);
+        } catch (RuntimeException e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
     @PostMapping("/create")
     @PreAuthorize("hasRole('EMPLOYEE') or hasRole('MANAGER') or hasRole('SUPERVISOR')")
     public ResponseEntity<?> createCustomer(@Valid @RequestBody CreateCustomerRequest request) {

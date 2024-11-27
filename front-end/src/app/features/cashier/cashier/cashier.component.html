@@ -22,21 +22,21 @@
 
     <!-- Products Accordion -->
     <mat-accordion class="products-accordion" *ngIf="!loading && !error">
-      <mat-expansion-panel [expanded]="searchTerm && filteredProductCategories.size > 0">
+      <mat-expansion-panel [expanded]="searchTerm && filteredProductCategories.length > 0">
         <mat-expansion-panel-header>
           <mat-panel-title>Products</mat-panel-title>
         </mat-expansion-panel-header>
 
         <!-- Sub-categories -->
         <mat-accordion multi="true">
-          <mat-expansion-panel *ngFor="let category of filteredProductCategories.keys()" [expanded]="!!searchTerm">
+          <mat-expansion-panel *ngFor="let categoryData of filteredProductCategories" [expanded]="!!searchTerm">
             <mat-expansion-panel-header>
-              <mat-panel-title>{{category}}</mat-panel-title>
+              <mat-panel-title>{{categoryData.category}}</mat-panel-title>
             </mat-expansion-panel-header>
 
             <!-- Products List -->
             <div class="products-grid">
-              <mat-card *ngFor="let product of filteredProductCategories.get(category)?.values()" class="product-card">
+              <mat-card *ngFor="let product of categoryData.products" class="product-card">
                 <mat-card-header>
                   <mat-card-title>{{product.name}}</mat-card-title>
                   <mat-card-subtitle>{{product.price | currency}}</mat-card-subtitle>
@@ -55,21 +55,21 @@
 
     <!-- Entry Products Accordion -->
     <mat-accordion class="entry-products-accordion" *ngIf="!loading && !error">
-      <mat-expansion-panel [expanded]="searchTerm && filteredEntryProductCategories.size > 0">
+      <mat-expansion-panel [expanded]="searchTerm && filteredEntryProductCategories.length > 0">
         <mat-expansion-panel-header>
           <mat-panel-title>Entry Products</mat-panel-title>
         </mat-expansion-panel-header>
 
         <!-- Sub-categories -->
         <mat-accordion multi="true">
-          <mat-expansion-panel *ngFor="let category of filteredEntryProductCategories.keys()" [expanded]="!!searchTerm">
+          <mat-expansion-panel *ngFor="let categoryData of filteredEntryProductCategories" [expanded]="!!searchTerm">
             <mat-expansion-panel-header>
-              <mat-panel-title>{{category}}</mat-panel-title>
+              <mat-panel-title>{{categoryData.category}}</mat-panel-title>
             </mat-expansion-panel-header>
 
             <!-- Entry Products List -->
             <div class="products-grid">
-              <mat-card *ngFor="let product of filteredEntryProductCategories.get(category)" class="product-card">
+              <mat-card *ngFor="let product of categoryData.products" class="product-card">
                 <mat-card-header>
                   <mat-card-title>{{product.name}}</mat-card-title>
                   <mat-card-subtitle>{{product.price | currency}}</mat-card-subtitle>

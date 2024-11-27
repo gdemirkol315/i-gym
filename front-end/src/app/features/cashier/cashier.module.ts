@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CashierRoutingModule } from './cashier-routing.module';
 import { CashierComponent } from './cashier/cashier.component';
-import { CustomerBarcodeDialogComponent } from './customer-barcode-dialog/customer-barcode-dialog.component';
+import { CustomerFindComponent } from './customer-find/customer-find.component';
 import { SharedModule } from '../../shared/shared.module';
 
 // Material Imports
@@ -16,15 +16,18 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   declarations: [
     CashierComponent,
-    CustomerBarcodeDialogComponent
+    CustomerFindComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     SharedModule,
     CashierRoutingModule,
     // Material Modules
@@ -36,7 +39,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatButtonModule,
     MatListModule,
     MatProgressSpinnerModule,
-    MatDialogModule
+    MatDialogModule,
+    MatRadioModule,
+    MatAutocompleteModule
   ]
 })
 export class CashierModule { }

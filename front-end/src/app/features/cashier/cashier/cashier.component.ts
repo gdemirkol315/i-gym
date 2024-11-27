@@ -4,7 +4,7 @@ import { CashierService } from '../cashier.service';
 import { EntryProduct, Product, ProductService } from '../../product/product.service';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { CustomerBarcodeDialogComponent } from '../customer-barcode-dialog/customer-barcode-dialog.component';
+import { CustomerFindComponent } from '../customer-find/customer-find.component';
 
 interface BasketItem {
   id: number;
@@ -16,6 +16,16 @@ interface BasketItem {
   customerBarcode?: string;
 }
 
+interface CategoryProducts {
+  category: string;
+  products: Product[];
+}
+
+interface CategoryEntryProducts {
+  category: string;
+  products: EntryProduct[];
+}
+
 @Component({
   selector: 'app-cashier',
   templateUrl: './cashier.component.html',
@@ -24,8 +34,8 @@ interface BasketItem {
 export class CashierComponent implements OnInit, OnDestroy {
   productCategories: Map<String, Array<Product>> = new Map();
   entryProductCategories: Map<String, Array<EntryProduct>> = new Map();
-  filteredProductCategories: Map<String, Array<Product>> = new Map();
-  filteredEntryProductCategories: Map<String, Array<EntryProduct>> = new Map();
+  filteredProductCategories: CategoryProducts[] = [];
+  filteredEntryProductCategories: CategoryEntryProducts[] = [];
   basket: BasketItem[] = [];
   totalSum = 0;
   loading = true;
@@ -105,12 +115,18 @@ export class CashierComponent implements OnInit, OnDestroy {
   }
 
   private filterProducts(term: string): void {
-    this.filteredProductCategories.clear();
-    this.filteredEntryProductCategories.clear();
+    this.filteredProductCategories = [];
+    this.filteredEntryProductCategories = [];
 
     if (!term.trim()) {
-      this.filteredProductCategories = new Map(this.productCategories);
-      this.filteredEntryProductCategories = new Map(this.entryProductCategories);
+      this.filteredProductCategories = Array.from(this.productCategories.entries()).map(([category, products]) => ({
+        category: category.toString(),
+        products
+      }));
+      this.filteredEntryProductCategories = Array.from(this.entryProductCategories.entries()).map(([category, products]) => ({
+        category: category.toString(),
+        products
+      }));
       return;
     }
 
@@ -123,7 +139,10 @@ export class CashierComponent implements OnInit, OnDestroy {
       );
 
       if (filteredProducts.length > 0) {
-        this.filteredProductCategories.set(category, filteredProducts);
+        this.filteredProductCategories.push({
+          category: category.toString(),
+          products: filteredProducts
+        });
       }
     });
 
@@ -133,7 +152,10 @@ export class CashierComponent implements OnInit, OnDestroy {
       );
 
       if (filteredProducts.length > 0) {
-        this.filteredEntryProductCategories.set(category, filteredProducts);
+        this.filteredEntryProductCategories.push({
+          category: category.toString(),
+          products: filteredProducts
+        });
       }
     });
   }
@@ -148,7 +170,7 @@ export class CashierComponent implements OnInit, OnDestroy {
             this.productCategories.set(item.category.toUpperCase(), new Array<Product>(item))
           }
         });
-        this.filteredProductCategories = new Map(this.productCategories);
+        this.filterProducts(''); // Initialize filtered products
         this.loading = false;
       },
       error: (error) => {
@@ -169,7 +191,7 @@ export class CashierComponent implements OnInit, OnDestroy {
             this.entryProductCategories.set(item.entryType.toUpperCase(), new Array<EntryProduct>(item))
           }
         });
-        this.filteredEntryProductCategories = new Map(this.entryProductCategories);
+        this.filterProducts(''); // Initialize filtered entry products
         this.loading = false;
       },
       error: (error) => {
@@ -182,7 +204,7 @@ export class CashierComponent implements OnInit, OnDestroy {
 
   async addToBasket(item: any, isEntryProduct: boolean = false): Promise<void> {
     if (isEntryProduct) {
-      const dialogRef = this.dialog.open(CustomerBarcodeDialogComponent, {
+      const dialogRef = this.dialog.open(CustomerFindComponent, {
         width: '400px',
         disableClose: true
       });
