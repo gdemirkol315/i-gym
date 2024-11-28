@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ProductService, Product, EntryProduct } from '../product.service';
+import { ProductService, Product } from '../product.service';
 import { AddProductDialogComponent } from '../add-product-dialog/add-product-dialog.component';
-import { AddEntryProductDialogComponent } from '../add-entry-product-dialog/add-entry-product-dialog.component';
 import { AddStockDialogComponent } from '../add-stock-dialog/add-stock-dialog.component';
 
 @Component({
@@ -12,9 +11,7 @@ import { AddStockDialogComponent } from '../add-stock-dialog/add-stock-dialog.co
 })
 export class ProductListComponent implements OnInit {
   products: Product[] = [];
-  entryProducts: EntryProduct[] = [];
   productColumns: string[] = ['id', 'name', 'barcode', 'category', 'price', 'quantity'];
-  entryProductColumns: string[] = ['id', 'name', 'duration', 'maxEntries', 'price', 'entryType'];
 
   constructor(
     private productService: ProductService,
@@ -23,7 +20,6 @@ export class ProductListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProducts();
-    this.loadEntryProducts();
   }
 
   loadProducts() {
@@ -32,26 +28,11 @@ export class ProductListComponent implements OnInit {
     });
   }
 
-  loadEntryProducts() {
-    this.productService.getEntryProducts().subscribe(products => {
-      this.entryProducts = products;
-    });
-  }
-
   openAddProductDialog() {
     const dialogRef = this.dialog.open(AddProductDialogComponent);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.loadProducts();
-      }
-    });
-  }
-
-  openAddEntryProductDialog() {
-    const dialogRef = this.dialog.open(AddEntryProductDialogComponent);
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.loadEntryProducts();
       }
     });
   }

@@ -1,0 +1,27 @@
+.entry-management-container {
+  padding: 20px;
+
+  .section {
+    margin-bottom: 30px;
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+
+      h2 {
+        margin: 0;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 10px;
+      }
+    }
+  }
+
+  mat-table {
+    width: 100%;
+  }
+}
